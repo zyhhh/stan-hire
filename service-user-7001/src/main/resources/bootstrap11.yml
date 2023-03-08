@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: user-service
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.0.105:8848
+        namespace: bb7f6cb6-e077-4463-bd1f-2836602f9121  # 注意命名空间使用 Data Id
+        group: dev
+        file-extension: yaml

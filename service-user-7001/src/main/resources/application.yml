@@ -6,7 +6,7 @@ server:
 
 spring:
   profiles:
-    active: dev
+    active: @activeEnv@
   banner:
     location: classpath:banner.txt
 

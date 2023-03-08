@@ -237,4 +237,23 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <!-- 当前环境 -->
+                <activeEnv>dev</activeEnv>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <activeEnv>prod</activeEnv>
+            </properties>
+        </profile>
+    </profiles>
 </project>
