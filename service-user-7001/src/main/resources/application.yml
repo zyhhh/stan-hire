@@ -1,0 +1,18 @@
+server:
+  port: ${port:7001}
+  tomcat:
+    uri-encoding: UTF-8
+    max-swallow-size: -1
+
+spring:
+  profiles:
+    active: dev
+  banner:
+    location: classpath:banner.txt
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*.xml
+  global-config:
+    banner: false   # mybatis-plus自带的banner不展示
+    db-config:
+      id-type: assign_id  # 设置数据库主键用雪花算法生成
