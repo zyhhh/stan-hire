@@ -46,6 +46,12 @@
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>-->
 
+        <!-- 引入客户端负载均衡器 loadbalancer -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+
         <!-- 数据库相关 -->
         <dependency>
             <groupId>mysql</groupId>

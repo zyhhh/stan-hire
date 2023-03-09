@@ -4,6 +4,7 @@ import cn.stan.grace.result.GraceResult;
 import cn.stan.pojo.Stu;
 import cn.stan.service.StuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,9 @@ public class HelloController {
 
     @Autowired
     private StuService stuService;
+
+    @Value("${server.port}")
+    private String port;
 
     @GetMapping("stu")
     public GraceResult saveStu() {
@@ -27,6 +31,6 @@ public class HelloController {
 
     @GetMapping("hello")
     public Object hello() {
-        return "hello, user";
+        return "hello, user:" + port;
     }
 }
