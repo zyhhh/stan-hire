@@ -3,6 +3,7 @@ package cn.stan.controller;
 import cn.stan.grace.result.GraceResult;
 import cn.stan.pojo.Stu;
 import cn.stan.service.StuService;
+import cn.stan.utils.TencentCloudProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,9 @@ public class HelloController {
 
     @Autowired
     private StuService stuService;
+
+    @Autowired
+    private TencentCloudProperties properties;
 
     @Value("${server.port}")
     private String port;
@@ -32,5 +36,10 @@ public class HelloController {
     @GetMapping("hello")
     public Object hello() {
         return "hello, user:" + port;
+    }
+
+    @GetMapping("test1")
+    public Object test1() {
+        return properties.getSecretId() + "---" + properties.getSecretKey();
     }
 }
