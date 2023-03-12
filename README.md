@@ -1,7 +1,7 @@
 # imooc-hire-dev
 
 #### 介绍
-慕聘网项目
+仿BOSS直聘项目
 
 #### 软件架构
 软件架构说明
@@ -15,17 +15,17 @@
 
 #### 使用说明
 
-1.  xxxx
+1.  本项目加入腾讯云短信服务，运行前请修改`hire-common`包下
+`tencentCloud.properties`的配置以及`SMSUtils.java`代码中的应用ID、签名、模板ID
 2.  xxxx
 3.  xxxx
 
 #### 参与贡献
 
 1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
+2.  新建 feature_xxx 分支
 3.  提交代码
 4.  新建 Pull Request
-
 
 #### 特技
 
