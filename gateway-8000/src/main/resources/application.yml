@@ -8,4 +8,4 @@ spring:
   application:
     name: gateway
   profiles:
-    active: dev
+    active: @activeEnv@

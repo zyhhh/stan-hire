@@ -16,6 +16,7 @@
         <module>service-user-7001</module>
         <module>service-company-6001</module>
         <module>gateway-8000</module>
+        <module>service-auth-8111</module>
     </modules>
 
     <parent>

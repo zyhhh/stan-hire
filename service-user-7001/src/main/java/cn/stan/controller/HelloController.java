@@ -1,10 +1,10 @@
 package cn.stan.controller;
 
-import cn.stan.grace.result.GraceResult;
+import cn.stan.common.result.GraceResult;
 import cn.stan.pojo.Stu;
 import cn.stan.service.StuService;
-import cn.stan.utils.SMSUtils;
-import cn.stan.utils.TencentCloudProperties;
+import cn.stan.common.utils.SMSUtil;
+import cn.stan.common.utils.TencentCloudProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +25,7 @@ public class HelloController {
     private String port;
 
     @Autowired
-    private SMSUtils smsUtils;
+    private SMSUtil smsUtil;
 
     @GetMapping("stu")
     public GraceResult saveStu() {
@@ -49,7 +49,7 @@ public class HelloController {
 
     @GetMapping("testSMS")
     public GraceResult testSMS() {
-        smsUtils.sendSMS("xxxx", "xxxx");
+        smsUtil.sendSMS("xxxx", "xxxx", "xxxx");
         return GraceResult.ok();
     }
 }

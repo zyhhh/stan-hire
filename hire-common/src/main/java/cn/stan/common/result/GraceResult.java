@@ -1,4 +1,4 @@
-package cn.stan.grace.result;
+package cn.stan.common.result;
 
 import java.util.Map;
 

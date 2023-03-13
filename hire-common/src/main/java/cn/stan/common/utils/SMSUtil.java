@@ -1,4 +1,4 @@
-package cn.stan.utils;
+package cn.stan.common.utils;
 
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class SMSUtils {
+public class SMSUtil {
     @Autowired
     private TencentCloudProperties tencentCloudProperties;
 
-    public void sendSMS(String phone, String code) {
+    public void sendSMS(String phone, String code, String expireTime) {
         try {
             /* 必要步骤：
              * 实例化一个认证对象，入参需要传入腾讯云账户密钥对secretId，secretKey。
@@ -63,7 +63,7 @@ public class SMSUtils {
             req.setPhoneNumberSet(phoneNumberSet);
 
             /* 模板参数（自定义占位变量）: 模板参数的个数需要与 TemplateId 对应模板的变量个数保持一致，若无模板参数，则设置为空 */
-            String[] templateParamSet = {code, "5"};
+            String[] templateParamSet = {code, expireTime};
             req.setTemplateParamSet(templateParamSet);
 
             // 返回的resp是一个SendSmsResponse的实例，与请求对象对应
