@@ -1,6 +1,8 @@
 package cn.stan.api.intercept;
 
 import cn.stan.common.base.BaseInfoProperties;
+import cn.stan.common.exception.GraceException;
+import cn.stan.common.result.ResponseStatusEnum;
 import cn.stan.common.utils.IPUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -17,7 +19,12 @@ public class SMSInterceptor extends BaseInfoProperties implements HandlerInterce
         // 限制60s后才能再次获取验证码
         boolean exist = redis.keyIsExist(MOBILE_SMSCODE + ":" + ip);
 
-        log.info("SMSInterceptor 是否放行: {}", !exist);
-        return !exist;
+        if(exist){
+            // 抛出异常
+            GraceException.display(ResponseStatusEnum.SMS_NEED_WAIT_ERROR);
+            return false;
+        }
+
+        return true;
     }
 }
