@@ -48,7 +48,7 @@ public class HelloController {
     }
 
     @GetMapping("testSMS")
-    public GraceResult testSMS() throws Exception {
+    public GraceResult testSMS() {
         smsUtils.sendSMS("xxxx", "xxxx");
         return GraceResult.ok();
     }
