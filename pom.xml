@@ -30,8 +30,30 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <spring.cloud-version>2021.0.5</spring.cloud-version>
-        <spring.cloud.alibaba-version>2021.0.4.0</spring.cloud.alibaba-version>
+        <spring.cloud.version>2021.0.5</spring.cloud.version>
+        <spring.cloud.alibaba.version>2021.0.4.0</spring.cloud.alibaba.version>
+        <mysql.version>8.0.29</mysql.version>
+        <mybatis-plus.version>3.5.0</mybatis-plus.version>
+        <pagehelper.version>1.4.1</pagehelper.version>
+        <mongodb.version>3.12.11</mongodb.version>
+        <zookeeper.version>3.8.0</zookeeper.version>
+        <curator.version>5.3.0</curator.version>
+        <jackson.version>2.14.0</jackson.version>
+        <baidu.sdk.version>4.16.8</baidu.sdk.version>
+        <jjwt.version>0.11.5</jjwt.version>
+        <commons.codec.version>1.15</commons.codec.version>
+        <commons.lang3.version>3.12.0</commons.lang3.version>
+        <commons.fileupload.version>1.5</commons.fileupload.version>
+        <commons.io.version>2.11.0</commons.io.version>
+        <httpclient.version>4.5.13</httpclient.version>
+        <guava.version>28.2-jre</guava.version>
+        <joda.time.version>2.10.6</joda.time.version>
+        <knife4j.version>2.0.9</knife4j.version>
+        <knife4j.ui.version>3.0.3</knife4j.ui.version>
+        <minio.version>8.2.1</minio.version>
+        <mp3spi.version>1.9.5.4</mp3spi.version>
+        <javacv.version>1.5.1</javacv.version>
+        <ffmpeg.version>4.1.3-1.5.1</ffmpeg.version>
     </properties>
 
     <dependencyManagement>
@@ -40,7 +62,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring.cloud-version}</version>
+                <version>${spring.cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -50,7 +72,7 @@
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring.cloud.alibaba-version}</version>
+                <version>${spring.cloud.alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -59,7 +81,7 @@
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>8.0.29</version>
+                <version>${mysql.version}</version>
             </dependency>
 
             <!-- mybatis -->
@@ -73,7 +95,7 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>3.5.0</version>
+                <version>${mybatis-plus.version}</version>
             </dependency>
 
             <!-- 通用mapper逆向工具 -->
@@ -87,31 +109,31 @@
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
-                <version>1.4.1</version>
+                <version>${pagehelper.version}</version>
             </dependency>
 
             <!-- MongoDB -->
             <dependency>
                 <groupId>org.mongodb</groupId>
                 <artifactId>mongodb-driver</artifactId>
-                <version>3.12.11</version>
+                <version>${mongodb.version}</version>
             </dependency>
 
             <!-- zookeeper -->
             <dependency>
                 <groupId>org.apache.zookeeper</groupId>
                 <artifactId>zookeeper</artifactId>
-                <version>3.8.0</version>
+                <version>${zookeeper.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.curator</groupId>
                 <artifactId>curator-framework</artifactId>
-                <version>5.3.0</version>
+                <version>${curator.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.curator</groupId>
                 <artifactId>curator-recipes</artifactId>
-                <version>5.3.0</version>
+                <version>${curator.version}</version>
             </dependency>
 
             <!-- okhttp -->
@@ -125,102 +147,121 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
-                <version>2.14.0</version>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-annotations</artifactId>
-                <version>2.14.0</version>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>2.14.0</version>
+                <version>${jackson.version}</version>
             </dependency>
 
             <!-- 百度api -->
             <dependency>
                 <groupId>com.baidu.aip</groupId>
                 <artifactId>java-sdk</artifactId>
-                <version>4.16.8</version>
+                <version>${baidu.sdk.version}</version>
             </dependency>
 
             <!-- apache 工具类 -->
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
-                <version>1.15</version>
+                <version>${commons.codec.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.12.0</version>
+                <version>${commons.lang3.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-fileupload</groupId>
                 <artifactId>commons-fileupload</artifactId>
-                <version>1.5</version>
+                <version>${commons.fileupload.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.11.0</version>
+                <version>${commons.io.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.5.13</version>
+                <version>${httpclient.version}</version>
             </dependency>
 
             <!-- google 工具类 -->
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>28.2-jre</version>
+                <version>${guava.version}</version>
             </dependency>
 
             <!-- joda-time 时间工具 -->
             <dependency>
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
-                <version>2.10.6</version>
+                <version>${joda.time.version}</version>
             </dependency>
 
             <!-- knife4j 接口文档工具 -->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-spring-boot-starter</artifactId>
-                <version>2.0.9</version>
+                <version>${knife4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-springdoc-ui</artifactId>
-                <version>3.0.3</version>
+                <version>${knife4j.ui.version}</version>
             </dependency>
 
             <!-- MinIO -->
             <dependency>
                 <groupId>io.minio</groupId>
                 <artifactId>minio</artifactId>
-                <version>8.2.1</version>
+                <version>${minio.version}</version>
             </dependency>
 
             <!-- 视频处理 -->
             <dependency>
                 <groupId>com.googlecode.soundlibs</groupId>
                 <artifactId>mp3spi</artifactId>
-                <version>1.9.5.4</version>
+                <version>${mp3spi.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.bytedeco</groupId>
                 <artifactId>javacv</artifactId>
-                <version>1.5.1</version>
+                <version>${javacv.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.bytedeco</groupId>
                 <artifactId>ffmpeg-platform</artifactId>
-                <version>4.1.3-1.5.1</version>
+                <version>${ffmpeg.version}</version>
+            </dependency>
+
+            <!-- 引入jjwt操作jwt -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if Gson is preferred -->
+                <version>${jjwt.version}</version>
+                <scope>runtime</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
