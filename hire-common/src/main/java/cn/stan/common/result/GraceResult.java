@@ -83,6 +83,16 @@ public class GraceResult {
     }
 
     /**
+     * 自定义错误返回，需要传入一个自定义的枚举，可以到[ResponseStatusEnum.java]中自定义后再传入
+     *
+     * @param responseStatus
+     * @return
+     */
+    public static GraceResult error(ResponseStatusEnum responseStatus) {
+        return new GraceResult(responseStatus);
+    }
+
+    /**
      * 错误返回，map中包含了多条错误信息，可以用于表单验证，把错误统一的全部返回出去
      *
      * @param map
@@ -109,20 +119,6 @@ public class GraceResult {
      */
     public static GraceResult errorTicket() {
         return new GraceResult(ResponseStatusEnum.TICKET_INVALID);
-    }
-
-    /**
-     * 自定义错误范围，需要传入一个自定义的枚举，可以到[ResponseStatusEnum.java[中自定义后再传入
-     *
-     * @param responseStatus
-     * @return
-     */
-    public static GraceResult errorCustom(ResponseStatusEnum responseStatus) {
-        return new GraceResult(responseStatus);
-    }
-
-    public static GraceResult exception(ResponseStatusEnum responseStatus) {
-        return new GraceResult(responseStatus);
     }
 
     public Integer getStatus() {
