@@ -89,8 +89,8 @@ public class PassportController extends BaseInfoProperties {
         return GraceResult.ok(usersVO);
     }
 
-    @PostMapping("login")
-    public GraceResult login(@RequestParam("userId") String userId) {
+    @PostMapping("logout")
+    public GraceResult logout(@RequestParam("userId") String userId) {
 
         // 删除redis中的token
         redis.del(REDIS_USER_TOKEN + ":" + userId);
