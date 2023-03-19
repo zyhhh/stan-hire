@@ -35,6 +35,14 @@ public class PassportController extends BaseInfoProperties {
     @Autowired
     private JWTUtil jwtUtil;
 
+    /**
+     * 获取手机验证码
+     * 60s内不能重复获取，详见 SMSInterceptor
+     *
+     * @param mobile
+     * @param request
+     * @return
+     */
     @PostMapping("getSMSCode")
     public GraceResult getSMSCode(String mobile, HttpServletRequest request) {
 
@@ -61,6 +69,12 @@ public class PassportController extends BaseInfoProperties {
         return GraceResult.ok();
     }
 
+    /**
+     * 注册/登录
+     *
+     * @param registLoginBO
+     * @return
+     */
     @PostMapping("login")
     public GraceResult login(@Valid @RequestBody RegistLoginBO registLoginBO) {
 
@@ -96,6 +110,12 @@ public class PassportController extends BaseInfoProperties {
         return GraceResult.ok(userVO);
     }
 
+    /**
+     * 登出
+     *
+     * @param userId
+     * @return
+     */
     @PostMapping("logout")
     public GraceResult logout(@RequestParam("userId") String userId) {
 
