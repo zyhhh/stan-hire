@@ -104,6 +104,7 @@ public enum ResponseStatusEnum {
 
     JWT_SIGNATURE_ERROR(5555, false, "用户校验失败，请重新登录！"),
     JWT_EXPIRE_ERROR(5556, false, "登录有效期已过，请重新登录！"),
+    JWT_ERROR(5557, false, "token错误，请重新登录！"),
 
     // 支付错误相关代码
     PAYMENT_USER_INFO_ERROR(5901, false, "用户id或密码不正确！"),

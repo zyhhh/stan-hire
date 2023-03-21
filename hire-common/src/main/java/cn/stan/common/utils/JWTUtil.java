@@ -2,7 +2,7 @@ package cn.stan.common.utils;
 
 import cn.stan.common.exception.GraceException;
 import cn.stan.common.result.ResponseStatusEnum;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +17,10 @@ import java.util.Date;
 @Component
 public class JWTUtil {
 
+    public static final String AT = "@";
+
     @Autowired
     private JWTProperties jwtProperties;
-
-    private static final String AT = "@";
 
     public String createJWT(String body) {
 
@@ -76,6 +76,24 @@ public class JWTUtil {
         }
 
         return jwtToken;
+    }
+
+    /**
+     * 校验 jwt，返回数据
+     * @param jwtStr
+     * @return
+     */
+    public String checkJWT(String jwtStr){
+        // 1.获取secretKey
+        SecretKey secretKey = generateSecretKey();
+
+        // 2.创建jwt解析器
+        JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(secretKey).build();
+
+        // 3.解析jwt得到Claims
+        Jws<Claims> claimsJws = jwtParser.parseClaimsJws(jwtStr);
+
+        return claimsJws.getBody().getSubject();
     }
 
     /**

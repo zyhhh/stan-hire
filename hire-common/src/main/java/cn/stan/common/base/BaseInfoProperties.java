@@ -1,7 +1,7 @@
 package cn.stan.common.base;
 
 import cn.stan.common.result.PagedGridResult;
-import cn.stan.common.utils.RedisOperator;
+import cn.stan.common.utils.RedisUtil;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,7 +10,7 @@ import java.util.List;
 public class BaseInfoProperties {
 
     @Autowired
-    public RedisOperator redis;
+    public RedisUtil redis;
 
     public static final String SYMBOL_DOT = ".";       // 小圆点，无意义，可用可不用
 
