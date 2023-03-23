@@ -6,6 +6,8 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 import sun.misc.BASE64Encoder;
 
@@ -15,16 +17,20 @@ import java.util.Date;
 
 @Slf4j
 @Component
+@RefreshScope
 public class JWTUtil {
 
     public static final String AT = "@";
 
-    @Autowired
-    private JWTProperties jwtProperties;
+    @Value("${jwt.key}")
+    public String jwtKey;
+
+    // @Autowired
+    // private JWTProperties jwtProperties;
 
     public String createJWT(String body) {
 
-        return handleJWT(body, null);
+        return buildJWT(body, null);
     }
 
     public String createJWT(String body, Long expireTime) {
@@ -35,12 +41,12 @@ public class JWTUtil {
         if (expireTime < 0)
             GraceException.display(ResponseStatusEnum.SYSTEM_EXPIRE_TIME_ERROR);
 
-        return handleJWT(body, expireTime);
+        return buildJWT(body, expireTime);
     }
 
     public String createJWTWithPrefix(String body, String prefix) {
 
-        return prefix + AT + handleJWT(body, null);
+        return prefix + AT + buildJWT(body, null);
     }
 
     public String createJWTWithPrefix(String body, Long expireTime, String prefix) {
@@ -51,7 +57,7 @@ public class JWTUtil {
         if (expireTime < 0)
             GraceException.display(ResponseStatusEnum.SYSTEM_EXPIRE_TIME_ERROR);
 
-        return prefix + AT + handleJWT(body, expireTime);
+        return prefix + AT + buildJWT(body, expireTime);
     }
 
     /**
@@ -61,12 +67,13 @@ public class JWTUtil {
      * @param expireTime
      * @return
      */
-    public String handleJWT(String body, Long expireTime) {
+    public String buildJWT(String body, Long expireTime) {
 
-        String jwtToken = "";
 
         // 1.获取secretKey
         SecretKey secretKey = generateSecretKey();
+
+        String jwtToken;
 
         // 2.生成jwtToken
         if (expireTime == null) {
@@ -80,10 +87,11 @@ public class JWTUtil {
 
     /**
      * 校验 jwt，返回数据
+     *
      * @param jwtStr
      * @return
      */
-    public String checkJWT(String jwtStr){
+    public String checkJWT(String jwtStr) {
         // 1.获取secretKey
         SecretKey secretKey = generateSecretKey();
 
@@ -102,8 +110,9 @@ public class JWTUtil {
      * @return
      */
     public SecretKey generateSecretKey() {
+        log.info("--------> jwtKey: {}", jwtKey);
         // 对秘钥进行base64加密
-        String encode = new BASE64Encoder().encode(jwtProperties.getKey().getBytes());
+        String encode = new BASE64Encoder().encode(jwtKey.getBytes());
 
         // 封装SecretKey
         return Keys.hmacShaKeyFor(encode.getBytes());
