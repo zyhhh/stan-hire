@@ -31,7 +31,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     @Autowired
     private UsersMapper usersMapper;
 
-    private static final String USER_FACE = "http://122.152.205.72:88/group1/M00/00/05/CpoxxF6ZUySASMbOAABBAXhjY0Y649.png";
+    private static final String USER_FACE = "https://hbimg.huabanimg.com/761e226fa727a6f986699afd8795deb41511e00b4d5e-dEBN7j_fw658";
 
     @Override
     public Users queryUserByMobile(String mobile) {
