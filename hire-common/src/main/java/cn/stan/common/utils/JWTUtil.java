@@ -2,17 +2,18 @@ package cn.stan.common.utils;
 
 import cn.stan.common.exception.GraceException;
 import cn.stan.common.result.ResponseStatusEnum;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 import sun.misc.BASE64Encoder;
 
 import javax.crypto.SecretKey;
-import javax.swing.table.AbstractTableModel;
 import java.util.Date;
 
 @Slf4j

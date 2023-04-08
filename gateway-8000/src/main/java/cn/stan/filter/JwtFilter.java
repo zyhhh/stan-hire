@@ -21,7 +21,6 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.MimeType;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -35,6 +34,9 @@ public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Order
 
     private static final String HEADER_USER_TOKEN = "headerUserToken";
 
+    // 路径匹配的规则器
+    private AntPathMatcher antPathMatcher = new AntPathMatcher();
+
     @Autowired
     private ExcludeUrlProperties excludeUrlProperties;
 
@@ -44,19 +46,15 @@ public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Order
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
-        // 1.获取当前请求路径
+        // 获取当前请求路径
         String path = exchange.getRequest().getURI().getPath();
-        log.info("请求路径: {}", path);
+        // log.info("请求路径: {}", path);
 
+        // 获取免鉴权的接口
         List<String> excludeUrls = excludeUrlProperties.getUrl();
 
-        // 2.排除的路径不用校验直接放行
         if (!CollectionUtils.isEmpty(excludeUrls)) {
-
-            AntPathMatcher antPathMatcher = new AntPathMatcher();
-
             boolean isExclude = excludeUrls.stream().anyMatch(url -> antPathMatcher.matchStart(path, url));
-
             // 匹配成功则直接放行
             if (isExclude) {
                 return chain.filter(exchange);
@@ -94,6 +92,10 @@ public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Order
         return renderErrorMsg(exchange, ResponseStatusEnum.UN_LOGIN);
     }
 
+    /**
+     * 过滤器执行顺序，数字越小越先执行
+     * @return
+     */
     @Override
     public int getOrder() {
         return 0;
@@ -131,20 +133,18 @@ public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Order
         // 1.获取response
         ServerHttpResponse response = exchange.getResponse();
 
-        // 2.构建返回的错误对象
-        GraceResult error = GraceResult.error(statusEnum);
-
-        // 3.修改响应的状态码为500
+        // 2.修改响应的状态码为500
         response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        // 4.设置响应头类型
+        // 3.设置响应头类型
         if (!response.getHeaders().containsKey("Content-Type")) {
             response.getHeaders().add("Content-Type", MimeTypeUtils.APPLICATION_JSON_VALUE);
         }
 
-        // 5.对象转换json并设置进response中
-        String resultJson = new Gson().toJson(error);
+        // 4.错误对象转成json并设置进response中
+        String resultJson = new Gson().toJson(GraceResult.error(statusEnum));
         DataBuffer dataBuffer = response.bufferFactory().wrap(resultJson.getBytes(StandardCharsets.UTF_8));
+
         return response.writeWith(Mono.just(dataBuffer));
     }
 

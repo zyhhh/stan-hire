@@ -9,3 +9,8 @@ spring:
     name: gateway
   profiles:
     active: @activeEnv@
+
+blackIP:
+  continueCounts: ${counts:3}    # ip连续请求的次数
+  timeInterval: ${interval:20}   # ip判断的时间间隔，单位：秒
+  limitTimes: ${times:30}        # 达到频率限制后需等待的时间，单位：秒

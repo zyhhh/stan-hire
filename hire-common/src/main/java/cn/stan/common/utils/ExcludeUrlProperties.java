@@ -13,5 +13,13 @@ import java.util.List;
 @ConfigurationProperties(prefix = "exclude")
 public class ExcludeUrlProperties {
 
+    /**
+     * 无需鉴权的接口
+     */
     private List<String> url;
+
+    /**
+     * ip限流校验的接口
+     */
+    private List<String> ipLimitUrl;
 }

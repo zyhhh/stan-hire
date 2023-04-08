@@ -1,4 +1,9 @@
 spring:
+  redis:
+    host: 192.168.0.105
+    port: 6379
+    database: 1
+    password: 123456
   cloud:
     nacos:
       discovery:

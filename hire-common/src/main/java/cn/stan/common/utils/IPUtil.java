@@ -13,38 +13,41 @@ import java.util.Optional;
  */
 public class IPUtil {
 
+    private static final String IP_UNKNOWN = "unknown";
+    private static final String IP_LOCAL = "127.0.0.1";
+    private static final int IP_LEN = 15;
+
+    private IPUtil() {
+    }
+
     /**
-     * 获取请求IP:
-     * 用户的真实IP不能使用request.getRemoteAddr()
+     * 获取请求ip
+     * 用户的真实ip不能使用request.getRemoteAddr()
      * 这是因为可能会使用一些代理软件，这样ip获取就不准确了
-     * 此外我们如果使用了多级（LVS/Nginx）反向代理的话，ip需要从X-Forwarded-For中获得第一个非unknown的IP才是用户的有效ip。
+     * 此外我们如果使用了多级（LVS/Nginx）反向代理的话，ip需要从X-Forwarded-For中获得第一个非unknown的ip才是用户的有效ip。
      *
      * @param request
      * @return
      */
     public static String getRequestIp(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || IP_UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || IP_UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || IP_UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_CLIENT_IP");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || IP_UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_X_FORWARDED_FOR");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || IP_UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
         return ip;
     }
-
-    private static final String IP_UNKNOWN = "unknown";
-    private static final String IP_LOCAL = "127.0.0.1";
-    private static final int IP_LEN = 15;
 
     /**
      * 获取客户端真实ip
@@ -76,7 +79,7 @@ public class IPUtil {
             }
         }
 
-        // 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
+        // 对于通过多个代理的情况，第一个IP为客户端真实IP，多个IP按照','分割
         if (ipAddress != null && ipAddress.length() > IP_LEN) {
             int index = ipAddress.indexOf(",");
             if (index > 0) {
