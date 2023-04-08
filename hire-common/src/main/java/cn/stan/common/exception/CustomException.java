@@ -7,8 +7,8 @@ public class CustomException extends RuntimeException {
     private ResponseStatusEnum responseStatusEnum;
 
     public CustomException(ResponseStatusEnum responseStatusEnum) {
-        super("自定义异常状态码: " + responseStatusEnum.status()
-                + ", 报错信息: " + responseStatusEnum.msg());
+        super("自定义异常，状态码：" + responseStatusEnum.status()
+                + "，报错信息：" + responseStatusEnum.msg());
         this.responseStatusEnum = responseStatusEnum;
     }
 
