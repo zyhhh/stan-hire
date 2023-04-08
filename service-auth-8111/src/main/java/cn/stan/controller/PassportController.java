@@ -58,7 +58,7 @@ public class PassportController extends BaseInfoProperties {
         log.info("验证码: {}", code);
 
         // 过期时间，分钟
-        int expireTime = 30;
+        int expireTime = 5;
 
         // 发送短信
         // smsUtil.sendSMS(phone, code, String.valueOf(expireTime));

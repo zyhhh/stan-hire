@@ -69,7 +69,6 @@ public class JWTUtil {
      */
     public String buildJWT(String body, Long expireTime) {
 
-
         // 1.获取secretKey
         SecretKey secretKey = generateSecretKey();
 
@@ -110,7 +109,7 @@ public class JWTUtil {
      * @return
      */
     public SecretKey generateSecretKey() {
-        log.info("--------> jwtKey: {}", jwtKey);
+        // log.info("--------> jwtKey: {}", jwtKey);
         // 对秘钥进行base64加密
         String encode = new BASE64Encoder().encode(jwtKey.getBytes());
 

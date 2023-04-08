@@ -1,12 +1,17 @@
 package cn.stan.common.exception;
 
 import cn.stan.common.result.GraceResult;
+import cn.stan.common.result.ResponseStatusEnum;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.security.SignatureException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,11 +19,38 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * 捕获自定义异常
+     * @param ex
+     * @return
+     */
     @ExceptionHandler(CustomException.class)
     public GraceResult handleCustomException(CustomException ex) {
         return GraceResult.error(ex.getResponseStatusEnum());
     }
 
+    /**
+     * 捕获jwt解析相关异常
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler({
+            SignatureException.class,
+            ExpiredJwtException.class,
+            UnsupportedJwtException.class,
+            MalformedJwtException.class,
+            io.jsonwebtoken.security.SignatureException.class
+    })
+    public GraceResult handleJWTException(SignatureException ex) {
+        ex.printStackTrace();
+        return GraceResult.error(ResponseStatusEnum.JWT_SIGNATURE_ERROR);
+    }
+
+    /**
+     * 捕获参数校验异常
+     * @param ex
+     * @return
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public GraceResult handleNotValidException(MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
