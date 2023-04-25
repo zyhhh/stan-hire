@@ -5,7 +5,7 @@ spring:
     nacos:
       # nacos 配置中心
       config:
-        server-addr: 192.168.0.105:8848
+        server-addr: @virtualIp@:8848
         namespace: bb7f6cb6-e077-4463-bd1f-2836602f9121  # 注意命名空间使用 DataId
         group: dev
         file-extension: yaml # 文件后缀名，文件名默认取的 ${spring.application.name}

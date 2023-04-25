@@ -9,7 +9,7 @@ import org.springframework.retry.annotation.EnableRetry;
 @SpringBootApplication
 @EnableDiscoveryClient
 @MapperScan(basePackages = "cn.stan.mapper")
-@EnableRetry
+// @EnableRetry 开启重试
 public class AuthApplication {
 
     public static void main(String[] args) {

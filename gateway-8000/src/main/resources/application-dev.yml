@@ -1,13 +1,13 @@
 spring:
   redis:
-    host: 192.168.0.105
+    host: @virtualIp@
     port: 6379
     database: 1
     password: 123456
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.0.105:8848
+        server-addr: @virtualIp@:8848
     gateway:
       discovery:
         locator:
