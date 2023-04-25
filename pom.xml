@@ -17,6 +17,8 @@
         <module>service-company-6001</module>
         <module>gateway-8000</module>
         <module>service-auth-8111</module>
+        <module>rabbit-producer</module>
+        <module>rabbit-consumer</module>
     </modules>
 
     <parent>
