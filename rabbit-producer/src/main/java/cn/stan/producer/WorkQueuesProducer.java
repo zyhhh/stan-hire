@@ -1,6 +1,5 @@
 package cn.stan.producer;
 
-import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -9,9 +8,9 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * 简单模式消息发送
+ * 工作队列模式 消息发送
  */
-public class FooProducer {
+public class WorkQueuesProducer {
 
     public static void main(String[] args) throws IOException, TimeoutException {
 
@@ -37,11 +36,13 @@ public class FooProducer {
             autoDelete – 如果我们声明一个自动删除队列，则为true（服务器将在不再使用时将其删除）
             arguments – 队列的其他属性（构造参数）
          */
-        channel.queueDeclare("hello", true, false, false, null);
+        channel.queueDeclare("work_queue", true, false, false, null);
 
         // 5.向队列发送消息，若无交换机则路由键和队列保持一致即可
-        String msg = "Hello 简单模式消息发送 ~~";
-        channel.basicPublish("", "hello", null, msg.getBytes());
+        for (int i = 0; i < 10; i++) {
+            String msg = "开启任务[" + i + "]";
+            channel.basicPublish("", "work_queue", null, msg.getBytes());
+        }
 
         // 6.释放资源
         channel.close();

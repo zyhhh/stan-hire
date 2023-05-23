@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * 简单模式消息接收
+ * 工作队列模式 消息接收
  */
-public class FooConsumer {
+public class WorkQueuesConsumerB {
 
     public static void main(String[] args) throws IOException, TimeoutException {
 
@@ -23,7 +23,7 @@ public class FooConsumer {
 
         Channel channel = connection.createChannel();
 
-        channel.queueDeclare("hello", true, false, false, null);
+        channel.queueDeclare("work_queue", true, false, false, null);
 
         DefaultConsumer consumer = new DefaultConsumer(channel) {
             /*
@@ -37,15 +37,11 @@ public class FooConsumer {
                                        Envelope envelope,
                                        AMQP.BasicProperties properties,
                                        byte[] body) {
-                System.out.println("consumerTag = " + consumerTag);
-                System.out.println("envelope = " + envelope.toString());
-                System.out.println("properties = " + properties.toString());
                 System.out.println("body = " + new String(body));
-                System.out.println("--------------------------------");
             }
         };
 
-        channel.basicConsume("hello", true, consumer);
+        channel.basicConsume("work_queue", true, consumer);
     }
 
 }
