@@ -12,6 +12,7 @@ spring:
       discovery:
         locator:
           enabled: true   # 动态路由
+      # 路由配置
       routes:
         - id: userRoute
           uri: lb://user-service

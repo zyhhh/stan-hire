@@ -281,13 +281,18 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 
     <profiles>
         <profile>
             <id>dev</id>
             <properties>
-                <!-- 当前环境 -->
                 <activeEnv>dev</activeEnv>
                 <virtualIp>192.168.0.104</virtualIp>
             </properties>

@@ -1,18 +1,22 @@
 package cn.stan.controller;
 
+import cn.stan.api.mq.RabbitMQConfig;
 import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.result.GraceResult;
 import cn.stan.common.result.ResponseStatusEnum;
+import cn.stan.common.utils.GsonUtil;
 import cn.stan.common.utils.IPUtil;
 import cn.stan.common.utils.JWTUtil;
 import cn.stan.common.utils.SMSUtil;
 import cn.stan.pojo.Users;
 import cn.stan.pojo.bo.RegistLoginBO;
+import cn.stan.pojo.mq.SMSContentQO;
 import cn.stan.pojo.vo.UsersVO;
 import cn.stan.service.UsersService;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +38,9 @@ public class PassportController extends BaseInfoProperties {
 
     @Autowired
     private JWTUtil jwtUtil;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     /**
      * 获取手机验证码
@@ -60,8 +67,15 @@ public class PassportController extends BaseInfoProperties {
         // 过期时间，分钟
         int expireTime = 5;
 
-        // 发送短信
-        // smsUtil.sendSMS(phone, code, String.valueOf(expireTime));
+        // smsUtil.sendSMS(mobile, code, String.valueOf(expireTime));
+        // 使用消息队列异步解耦发送短信
+        SMSContentQO contentQO = new SMSContentQO();
+        contentQO.setMobile(mobile);
+        contentQO.setContent(code);
+        contentQO.setExpireTime(String.valueOf(expireTime));
+        rabbitTemplate.convertAndSend(RabbitMQConfig.SMS_EXCHANGE,
+                "stan.sms.send.login",
+                GsonUtil.objectToString(contentQO));
 
         // 将验证码存于Redis中
         redis.set(MOBILE_SMSCODE + ":" + mobile, code, expireTime * 60);

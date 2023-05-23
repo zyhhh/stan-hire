@@ -19,8 +19,16 @@ spring:
     nacos:
       discovery:
         server-addr: @virtualIp@:8848
+  # redis 配置
   redis:
     host: @virtualIp@
     port: 6379
     database: 0
     password: 123456
+  # rabbitmq 配置
+  rabbitmq:
+    host: @virtualIp@
+    port: 5672
+    virtual-host: /
+    username: imooc
+    password: imooc

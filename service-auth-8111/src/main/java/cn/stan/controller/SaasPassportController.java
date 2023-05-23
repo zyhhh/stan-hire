@@ -26,7 +26,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("saas")
-public class SaaSPassportController extends BaseInfoProperties {
+public class SaasPassportController extends BaseInfoProperties {
 
     @Autowired
     private UsersService usersService;
