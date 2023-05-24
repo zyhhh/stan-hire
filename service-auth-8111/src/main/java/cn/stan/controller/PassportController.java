@@ -74,7 +74,7 @@ public class PassportController extends BaseInfoProperties {
         contentQO.setContent(code);
         contentQO.setExpireTime(String.valueOf(expireTime));
         rabbitTemplate.convertAndSend(RabbitMQConfig.SMS_EXCHANGE,
-                "stan.sms.send.login",
+                RabbitMQConfig.ROUTING_KEY_SMS_SEND_LOGIN,
                 GsonUtil.objectToString(contentQO));
 
         // 将验证码存于Redis中

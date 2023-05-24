@@ -1,11 +1,11 @@
 server:
-  port: 6001
+  port: 4001
   tomcat:
     uri-encoding: UTF-8
     max-swallow-size: -1
 
 spring:
   application:
-    name: company-service
+    name: resource-service
   profiles:
     active: @activeEnv@

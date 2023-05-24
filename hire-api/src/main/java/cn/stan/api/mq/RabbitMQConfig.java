@@ -13,6 +13,9 @@ public class RabbitMQConfig {
     public static final String SMS_QUEUE = "sms_queue";
     public static final String SMS_ROUTING_KEY = "stan.sms.#";
 
+    public static final String ROUTING_KEY_SMS_SEND_LOGIN = "stan.sms.send.login";
+
+
     @Bean(SMS_EXCHANGE)
     public Exchange exchange() {
         return ExchangeBuilder

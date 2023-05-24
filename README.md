@@ -15,9 +15,8 @@
 
 #### 使用说明
 
-1.  本项目加入腾讯云短信服务，运行前请修改`hire-common`包下
-`tencentCloud.properties`的配置以及`SMSUtils.java`代码中的应用ID、签名、模板ID
-2.  xxxx
+1.  本项目加入腾讯云短信服务，运行前请修改`hire-common`包下`tencentCloud.properties`的配置以及`SMSUtils.java`代码中的应用ID、签名、模板ID
+2.  nacos需要加入jwt_config.yaml配置，键为`jwt.key`，该key用于加密jwt。详见`gateway-8000/src/main/resources/bootstrap.yml`配置
 3.  xxxx
 
 #### 参与贡献

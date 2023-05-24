@@ -26,6 +26,10 @@ spring:
           uri: lb://auth-service
           predicates:
             - Path=/a/**,/passport/**,/saas/**
+        - id: resourceRoute
+          uri: lb://resource-service
+          predicates:
+            - Path=/r/**
       # 网关跨域配置
       globalcors:
         cors-configurations:
