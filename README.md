@@ -19,6 +19,20 @@
 2.  nacos需要加入jwt_config.yaml配置，键为`jwt.key`，该key用于加密jwt。详见`gateway-8000/src/main/resources/bootstrap.yml`配置
 3.  xxxx
 
+#### 模块说明
+
+| 模块          | 说明     | 端口   |
+|:------------|:-------|:-----|
+| hire-common | 通用工具包  | -    |
+| hire-pojo   | 实体类包   | -    |
+| hire-api    | 公共模块包  | -    |
+| gateway     | 网关服务   | 8000 |
+| auth        | 注册认证服务 | 8111 |
+| company     | 企业服务   | 6001 |
+| user        | 用户服务   | 7001 |
+| resource    | 资源服务   | 4001 |
+| work        | 工作服务   | 3001 |
+
 #### 参与贡献
 
 1.  Fork 本仓库
