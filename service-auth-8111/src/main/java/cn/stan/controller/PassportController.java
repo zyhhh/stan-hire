@@ -16,6 +16,7 @@ import cn.stan.service.UsersService;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,20 +68,48 @@ public class PassportController extends BaseInfoProperties {
         // 过期时间，分钟
         int expireTime = 5;
 
-        // smsUtil.sendSMS(mobile, code, String.valueOf(expireTime));
-        // 使用消息队列异步解耦发送短信
+        // 组装消息对象
         SMSContentQO contentQO = new SMSContentQO();
         contentQO.setMobile(mobile);
         contentQO.setContent(code);
         contentQO.setExpireTime(String.valueOf(expireTime));
-        rabbitTemplate.convertAndSend(RabbitMQConfig.SMS_EXCHANGE,
-                RabbitMQConfig.ROUTING_KEY_SMS_SEND_LOGIN,
-                GsonUtil.objectToString(contentQO));
+
+        sendSmsWithMQ(contentQO);
+        // smsUtil.sendSMS(mobile, code, String.valueOf(expireTime));
 
         // 将验证码存于Redis中
         redis.set(MOBILE_SMSCODE + ":" + mobile, code, expireTime * 60);
 
         return GraceResult.ok();
+    }
+
+    private void sendSmsWithMQ(SMSContentQO contentQO) {
+
+        // 定义confirm回调，不管交换机是否成功收到消息都会进入
+        // correlationData--相关性参数, ack--交换机是否成功收到消息, cause--失败原因
+        rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
+            log.info("进入 confirmCallback >>>>");
+            assert correlationData != null;
+            log.info("correlationData: {}", correlationData.getId());
+            if (ack) {
+                // 成功时，cause为null
+                log.info("交换机成功接收到消息，{}", cause);
+            } else {
+                log.info("交换机接收到消息失败，失败原因：{}", cause);
+            }
+        });
+
+        // 定义return回调，消息没有正确路由到队列中则进入
+        rabbitTemplate.setReturnsCallback(returnedMsg -> {
+            log.info("进入 returnCallback >>>>");
+            log.info("returnedMsg: {}", GsonUtil.objectToString(returnedMsg));
+        });
+
+        // 使用消息队列异步解耦发送短信
+        rabbitTemplate.convertAndSend(RabbitMQConfig.SMS_EXCHANGE,
+                RabbitMQConfig.ROUTING_KEY_SMS_SEND_LOGIN,
+                GsonUtil.objectToString(contentQO),
+                new CorrelationData());
     }
 
     /**

@@ -32,3 +32,5 @@ spring:
     virtual-host: /
     username: imooc
     password: imooc
+    publisher-confirm-type: correlated  # 配置开启Publisher-Confirm确认机制
+    publisher-returns: true       # 配置开启Publisher-Return确认机制
