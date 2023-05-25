@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://@virtualIp@:3306/imooc_hire?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: 123456
+    hikari:
+      connection-timeout: 30000
+      minimum-idle: 5
+      maximum-pool-size: 20
+      auto-commit: true
+      idle-timeout: 600000
+      pool-name: DataSourceHikariCP
+      max-lifetime: 18000000
+      connection-test-query: SELECT 1
+  # nacos 注册中心
+  cloud:
+    nacos:
+      discovery:
+        server-addr: @virtualIp@:8848

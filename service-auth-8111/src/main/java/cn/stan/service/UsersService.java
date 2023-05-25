@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author stan
  * @since 2023-03-04
  */
-public interface UsersService extends IService<Users> {
+public interface UsersService {
 
     Users queryUserByMobile(String mobile);
 

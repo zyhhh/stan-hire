@@ -1,0 +1,18 @@
+server:
+  port: 3001
+  tomcat:
+    uri-encoding: UTF-8
+    max-swallow-size: -1
+
+spring:
+  application:
+    name: work-service
+  profiles:
+    active: @activeEnv@
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*.xml
+  global-config:
+    banner: false
+    db-config:
+      id-type: assign_id

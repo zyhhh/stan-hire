@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
  * @since 2023-03-04
  */
 @Service
-public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements UsersService {
+public class UsersServiceImpl implements UsersService {
 
     @Autowired
     private UsersMapper usersMapper;
