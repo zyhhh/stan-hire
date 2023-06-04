@@ -17,4 +17,5 @@ public interface UsersService {
 
     Users createUsers(String mobile);
 
+    Users getById(String userId);
 }
