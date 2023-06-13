@@ -23,7 +23,7 @@ public class ResumeServiceImpl implements ResumeService {
     @Autowired
     private ResumeMapper resumeMapper;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void initResume(String userId) {
         Resume resume = new Resume();
