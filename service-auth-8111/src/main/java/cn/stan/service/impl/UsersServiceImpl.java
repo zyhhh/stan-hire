@@ -1,5 +1,6 @@
 package cn.stan.service.impl;
 
+import cn.stan.api.feign.WorkFeign;
 import cn.stan.common.enums.Sex;
 import cn.stan.common.enums.ShowWhichName;
 import cn.stan.common.enums.UserRole;
@@ -9,7 +10,6 @@ import cn.stan.mapper.UsersMapper;
 import cn.stan.pojo.Users;
 import cn.stan.service.UsersService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +31,9 @@ public class UsersServiceImpl implements UsersService {
     @Autowired
     private UsersMapper usersMapper;
 
+    @Autowired
+    private WorkFeign workFeign;
+
     private static final String USER_FACE = "https://hbimg.huabanimg.com/761e226fa727a6f986699afd8795deb41511e00b4d5e-dEBN7j_fw658";
 
     @Override
@@ -41,10 +44,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public Users queryUserByMobile(String mobile) {
 
-        Users users = usersMapper.selectOne(new QueryWrapper<Users>()
-                .eq("mobile", mobile));
-
-        return users;
+        return usersMapper.selectOne(new QueryWrapper<Users>().eq("mobile", mobile));
     }
 
     @Transactional(rollbackFor = {Exception.class})
@@ -81,6 +81,9 @@ public class UsersServiceImpl implements UsersService {
         user.setUpdatedTime(LocalDateTime.now());
 
         usersMapper.insert(user);
+
+        // 初始化简历
+        workFeign.init(user.getId());
 
         return user;
     }
