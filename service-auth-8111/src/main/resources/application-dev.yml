@@ -19,6 +19,9 @@ spring:
     nacos:
       discovery:
         server-addr: @virtualIp@:8848
+    loadbalancer:
+      nacos:
+        enabled: true   # 开启基于nacos的负载均衡
   # redis 配置
   redis:
     host: @virtualIp@
