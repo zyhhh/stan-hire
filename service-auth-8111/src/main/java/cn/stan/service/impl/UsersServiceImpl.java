@@ -34,6 +34,7 @@ public class UsersServiceImpl implements UsersService {
     @Autowired
     private WorkFeign workFeign;
 
+    // 用户默认头像url
     private static final String USER_FACE = "https://hbimg.huabanimg.com/761e226fa727a6f986699afd8795deb41511e00b4d5e-dEBN7j_fw658";
 
     @Override
