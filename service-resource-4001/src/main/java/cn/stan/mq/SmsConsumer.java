@@ -46,8 +46,8 @@ public class SmsConsumer {
 
         try {
             /*if (routingKey.equalsIgnoreCase(RabbitMQConfig.ROUTING_KEY_SMS_SEND_LOGIN)) {
-                SMSContentQO smsContentQO = GsonUtil.stringToBean(payload, SMSContentQO.class);
-                smsUtil.sendSMS(smsContentQO.getMobile(), smsContentQO.getContent(), smsContentQO.getExpireTime());
+                SMSContentQO smsContentQO = GsonUtils.stringToBean(payload, SMSContentQO.class);
+                smsUtils.sendSMS(smsContentQO.getMobile(), smsContentQO.getContent(), smsContentQO.getExpireTime());
             }*/
             channel.basicAck(deliveryTag, true);
         } catch (Exception e) {

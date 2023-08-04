@@ -136,11 +136,12 @@ public class PassportController extends BaseInfoProperties {
             user = usersService.createUsers(mobile);
         }
 
-        /* 3.将token保存到redis中（有状态token）
+        /* 将token保存到redis中（有状态token）
         String uToken = TOKEN_USER_PREFIX + SYMBOL_DOT + UUID.randomUUID();
         redis.set(REDIS_USER_TOKEN + ":" + user.getId(), uToken, 4 * 60 * 60);*/
-        // 3.创建jwt，有效时间为60s（无状态token）
+        // 创建jwt，有效时间为60s（无状态token）
         // String jwt = jwtUtil.createJWTWithPrefix(new Gson().toJson(user), 60 * 1000L, TOKEN_USER_PREFIX);
+        // 创建jwt，无失效时间（无状态token）
         String jwt = jwtUtils.createJWTWithPrefix(new Gson().toJson(user), TOKEN_USER_PREFIX);
 
         // 4.删除redis中验证码
