@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class GsonUtil {
+public class GsonUtils {
 
     /**
      * 不用创建对象,直接使用Gson.就可以调用方法
@@ -31,7 +31,7 @@ public class GsonUtil {
         }
     }
 
-    private GsonUtil() {
+    private GsonUtils() {
     }
 
     /**

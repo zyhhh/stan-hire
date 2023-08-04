@@ -4,10 +4,10 @@ import cn.stan.api.mq.RabbitMQConfig;
 import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.result.GraceResult;
 import cn.stan.common.result.ResponseStatusEnum;
-import cn.stan.common.utils.GsonUtil;
-import cn.stan.common.utils.IPUtil;
-import cn.stan.common.utils.JWTUtil;
-import cn.stan.common.utils.SMSUtil;
+import cn.stan.common.utils.GsonUtils;
+import cn.stan.common.utils.IPUtils;
+import cn.stan.common.utils.JWTUtils;
+import cn.stan.common.utils.SMSUtils;
 import cn.stan.pojo.Users;
 import cn.stan.pojo.bo.RegistLoginBO;
 import cn.stan.pojo.mq.SMSContentQO;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -32,13 +31,13 @@ import java.util.UUID;
 public class PassportController extends BaseInfoProperties {
 
     @Autowired
-    private SMSUtil smsUtil;
+    private SMSUtils smsUtils;
 
     @Autowired
     private UsersService usersService;
 
     @Autowired
-    private JWTUtil jwtUtil;
+    private JWTUtils jwtUtils;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -58,8 +57,8 @@ public class PassportController extends BaseInfoProperties {
             return GraceResult.errorMsg("手机号为空");
         }
         // 获取用户ip地址，存入Redis，限制60s请求一次
-        String ip = IPUtil.getRequestIp(request);
-        redis.setnx60s(MOBILE_SMSCODE + ":" + ip, mobile);
+        String ip = IPUtils.getRequestIp(request);
+        redisUtils.setnx60s(MOBILE_SMSCODE + ":" + ip, mobile);
 
         // 6位随机数
         String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
@@ -78,7 +77,7 @@ public class PassportController extends BaseInfoProperties {
         // smsUtil.sendSMS(mobile, code, String.valueOf(expireTime));
 
         // 将验证码存于Redis中
-        redis.set(MOBILE_SMSCODE + ":" + mobile, code, expireTime * 60);
+        redisUtils.set(MOBILE_SMSCODE + ":" + mobile, code, expireTime * 60);
 
         return GraceResult.ok();
     }
@@ -103,13 +102,13 @@ public class PassportController extends BaseInfoProperties {
         // 定义return回调，消息没有正确路由到队列中则进入
         rabbitTemplate.setReturnsCallback(returnedMsg -> {
             log.info(">>>> 进入 returnCallback");
-            log.info("returnedMsg: {}", GsonUtil.objectToString(returnedMsg));
+            log.info("returnedMsg: {}", GsonUtils.objectToString(returnedMsg));
         });
 
         // 使用消息队列异步解耦发送短信
         rabbitTemplate.convertAndSend(RabbitMQConfig.SMS_EXCHANGE,
                 RabbitMQConfig.ROUTING_KEY_SMS_SEND_LOGIN,
-                GsonUtil.objectToString(contentQO),
+                GsonUtils.objectToString(contentQO),
                 new CorrelationData());
     }
 
@@ -126,7 +125,7 @@ public class PassportController extends BaseInfoProperties {
         String smsCode = registLoginBO.getSmsCode();
 
         // 1.校验验证码
-        String code = redis.get(MOBILE_SMSCODE + ":" + mobile);
+        String code = redisUtils.get(MOBILE_SMSCODE + ":" + mobile);
         if (StringUtils.isBlank(code) || !smsCode.equalsIgnoreCase(code)) {
             return GraceResult.error(ResponseStatusEnum.SMS_CODE_ERROR);
         }
@@ -142,10 +141,10 @@ public class PassportController extends BaseInfoProperties {
         redis.set(REDIS_USER_TOKEN + ":" + user.getId(), uToken, 4 * 60 * 60);*/
         // 3.创建jwt，有效时间为60s（无状态token）
         // String jwt = jwtUtil.createJWTWithPrefix(new Gson().toJson(user), 60 * 1000L, TOKEN_USER_PREFIX);
-        String jwt = jwtUtil.createJWTWithPrefix(new Gson().toJson(user), TOKEN_USER_PREFIX);
+        String jwt = jwtUtils.createJWTWithPrefix(new Gson().toJson(user), TOKEN_USER_PREFIX);
 
         // 4.删除redis中验证码
-        redis.del(MOBILE_SMSCODE + ":" + mobile);
+        redisUtils.del(MOBILE_SMSCODE + ":" + mobile);
 
         // 5.组装数据返回给前端
         UsersVO userVO = new UsersVO();
@@ -165,7 +164,7 @@ public class PassportController extends BaseInfoProperties {
     public GraceResult logout(@RequestParam("userId") String userId) {
 
         // 删除redis中的token
-        redis.del(REDIS_USER_TOKEN + ":" + userId);
+        redisUtils.del(REDIS_USER_TOKEN + ":" + userId);
 
         return GraceResult.ok();
     }

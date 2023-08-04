@@ -19,7 +19,7 @@ import java.util.Date;
 @Slf4j
 @Component
 @RefreshScope
-public class JWTUtil {
+public class JWTUtils {
 
     public static final String AT = "@";
 

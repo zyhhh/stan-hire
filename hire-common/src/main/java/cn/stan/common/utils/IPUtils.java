@@ -11,13 +11,13 @@ import java.util.Optional;
 /**
  * 用户获得用户ip的工具类
  */
-public class IPUtil {
+public class IPUtils {
 
     private static final String IP_UNKNOWN = "unknown";
     private static final String IP_LOCAL = "127.0.0.1";
     private static final int IP_LEN = 15;
 
-    private IPUtil() {
+    private IPUtils() {
     }
 
     /**

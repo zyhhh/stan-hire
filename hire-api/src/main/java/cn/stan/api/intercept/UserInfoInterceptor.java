@@ -1,9 +1,6 @@
 package cn.stan.api.intercept;
 
 import cn.stan.common.base.BaseInfoProperties;
-import cn.stan.common.exception.GraceException;
-import cn.stan.common.result.ResponseStatusEnum;
-import cn.stan.common.utils.IPUtil;
 import cn.stan.pojo.Admin;
 import cn.stan.pojo.Users;
 import com.google.gson.Gson;
@@ -13,7 +10,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
 
 @Slf4j
 public class UserInfoInterceptor extends BaseInfoProperties implements HandlerInterceptor {

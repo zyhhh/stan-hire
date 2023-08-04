@@ -4,7 +4,7 @@ import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.result.GraceResult;
 import cn.stan.common.result.ResponseStatusEnum;
 import cn.stan.common.utils.ExcludeUrlProperties;
-import cn.stan.common.utils.JWTUtil;
+import cn.stan.common.utils.JWTUtils;
 import com.google.gson.Gson;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Order
     private ExcludeUrlProperties excludeUrlProperties;
 
     @Autowired
-    private JWTUtil jwtUtil;
+    private JWTUtils jwtUtils;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -68,7 +68,7 @@ public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Order
         String token = headers.getFirst(HEADER_USER_TOKEN);
         if (StringUtils.isNotBlank(token)) {
             // 验证token
-            String[] split = token.split(JWTUtil.AT);
+            String[] split = token.split(JWTUtils.AT);
             if (split.length < 2) {
                 return renderErrorMsg(exchange, ResponseStatusEnum.JWT_ERROR);
             }
@@ -111,7 +111,7 @@ public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Order
      */
     public Mono<Void> checkJWT(String jwt, String jsonKey, ServerWebExchange exchange, GatewayFilterChain chain) {
         try {
-            String userJson = jwtUtil.checkJWT(jwt);
+            String userJson = jwtUtils.checkJWT(jwt);
             ServerWebExchange newExchange = setNewHeader(exchange, jsonKey, userJson);
             return chain.filter(newExchange);
         } catch (ExpiredJwtException e) {

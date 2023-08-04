@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Java8 LocalDate 日期时间 工具类
  */
-public class LocalDateUtil {
+public class LocalDateUtils {
 
     /**
      * 显示年月日时分秒，例如 2015-08-11 09:51:53.

@@ -1,9 +1,7 @@
 package cn.stan.mq;
 
 import cn.stan.api.mq.RabbitMQConfig;
-import cn.stan.common.utils.GsonUtil;
-import cn.stan.common.utils.SMSUtil;
-import cn.stan.pojo.mq.SMSContentQO;
+import cn.stan.common.utils.SMSUtils;
 import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -15,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SmsConsumer {
     @Autowired
-    private SMSUtil smsUtil;
+    private SMSUtils smsUtils;
 
     /*@RabbitListener(queues = {RabbitMQConfig.SMS_QUEUE})
     public void listenSmsMsg(String payload, Message message) {

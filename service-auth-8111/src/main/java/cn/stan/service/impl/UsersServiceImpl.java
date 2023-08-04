@@ -4,8 +4,8 @@ import cn.stan.api.feign.WorkFeign;
 import cn.stan.common.enums.Sex;
 import cn.stan.common.enums.ShowWhichName;
 import cn.stan.common.enums.UserRole;
-import cn.stan.common.utils.DesensitizationUtil;
-import cn.stan.common.utils.LocalDateUtil;
+import cn.stan.common.utils.DesensitizationUtils;
+import cn.stan.common.utils.LocalDateUtils;
 import cn.stan.mapper.UsersMapper;
 import cn.stan.pojo.Users;
 import cn.stan.service.UsersService;
@@ -55,15 +55,15 @@ public class UsersServiceImpl implements UsersService {
         Users user = new Users();
 
         user.setMobile(mobile);
-        user.setNickname("用户" + DesensitizationUtil.commonDisplay(mobile));
-        user.setRealName("用户" + DesensitizationUtil.commonDisplay(mobile));
+        user.setNickname("用户" + DesensitizationUtils.commonDisplay(mobile));
+        user.setRealName("用户" + DesensitizationUtils.commonDisplay(mobile));
         user.setShowWhichName(ShowWhichName.nickname.type);
 
         user.setSex(Sex.SECRET.type);
         user.setFace(USER_FACE);
         user.setEmail("");
 
-        LocalDate birthday = LocalDateUtil.parseLocalDate("1980-01-01", LocalDateUtil.DATE_PATTERN);
+        LocalDate birthday = LocalDateUtils.parseLocalDate("1980-01-01", LocalDateUtils.DATE_PATTERN);
         user.setBirthday(birthday);
 
         user.setCountry("中国");

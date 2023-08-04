@@ -4,7 +4,7 @@ import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.result.GraceResult;
 import cn.stan.common.result.ResponseStatusEnum;
 import cn.stan.common.utils.ExcludeUrlProperties;
-import cn.stan.common.utils.IPUtil;
+import cn.stan.common.utils.IPUtils;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ import java.util.List;
 public class IpLimitFilter extends BaseInfoProperties implements GlobalFilter, Ordered {
 
     // 路径匹配的规则器
-    private AntPathMatcher antPathMatcher = new AntPathMatcher();
+    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Autowired
     private ExcludeUrlProperties excludeUrlProperties;
@@ -71,29 +71,29 @@ public class IpLimitFilter extends BaseInfoProperties implements GlobalFilter, O
     public Mono<Void> doLimit(ServerWebExchange exchange, GatewayFilterChain chain, String path) {
         // 获取当前访问ip
         ServerHttpRequest request = exchange.getRequest();
-        String ip = IPUtil.getIP(request);
+        String ip = IPUtils.getIP(request);
 
         // 设置redis的键
         String ipKey = "gateway-ip:" + ip + ":" + path;
         String ipLimitKey = "gateway-ip-limit:" + ip + ":" + path;
 
         // 1.校验当前ip是否已被限制
-        long ttl = redis.ttl(ipLimitKey);
+        long ttl = redisUtils.ttl(ipLimitKey);
         if (ttl > 0) {
             return renderErrorMsg(exchange, ResponseStatusEnum.SYSTEM_ERROR_BLACK_IP);
         }
 
         // 2.判断当前ip请求接口的次数
-        long reqCount = redis.increment(ipKey, 1);
+        long reqCount = redisUtils.increment(ipKey, 1);
 
         // 若第一次进来，设置接口的限制时间
         if (reqCount == 1) {
-            redis.expire(ipKey, timeInterval);
+            redisUtils.expire(ipKey, timeInterval);
         }
 
         // 如果访问次数达到限制，则进行限流并返回错误
         if (reqCount > continueCounts) {
-            redis.set(ipLimitKey, "1", limitTimes);
+            redisUtils.set(ipLimitKey, "1", limitTimes);
             return renderErrorMsg(exchange, ResponseStatusEnum.SYSTEM_ERROR_BLACK_IP);
         }
 

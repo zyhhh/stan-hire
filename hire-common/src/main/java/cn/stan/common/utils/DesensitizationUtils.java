@@ -8,7 +8,7 @@ package cn.stan.common.utils;
  * 邮箱
  * 地址等
  */
-public class DesensitizationUtil {
+public class DesensitizationUtils {
 
     private static final int SIZE = 6;
     private static final String SYMBOL = "*";
