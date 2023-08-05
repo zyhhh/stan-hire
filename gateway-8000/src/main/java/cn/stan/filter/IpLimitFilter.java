@@ -4,6 +4,7 @@ import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.result.GraceResult;
 import cn.stan.common.result.ResponseStatusEnum;
 import cn.stan.common.utils.ExcludeUrlProperties;
+import cn.stan.common.utils.GsonUtils;
 import cn.stan.common.utils.IPUtils;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
@@ -121,7 +122,7 @@ public class IpLimitFilter extends BaseInfoProperties implements GlobalFilter, O
         }
 
         // 4.错误对象转成json并设置进response中
-        String resultJson = new Gson().toJson(GraceResult.error(statusEnum));
+        String resultJson = GsonUtils.objectToString(GraceResult.error(statusEnum));
         DataBuffer dataBuffer = response.bufferFactory().wrap(resultJson.getBytes(StandardCharsets.UTF_8));
 
         return response.writeWith(Mono.just(dataBuffer));

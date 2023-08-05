@@ -1,5 +1,7 @@
 package cn.stan.common.result;
 
+import com.github.pagehelper.PageInfo;
+
 import java.util.List;
 
 /**

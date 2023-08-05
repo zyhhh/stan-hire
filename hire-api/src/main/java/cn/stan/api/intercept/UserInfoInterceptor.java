@@ -1,6 +1,7 @@
 package cn.stan.api.intercept;
 
 import cn.stan.common.base.BaseInfoProperties;
+import cn.stan.common.utils.GsonUtils;
 import cn.stan.pojo.Admin;
 import cn.stan.pojo.Users;
 import com.google.gson.Gson;
@@ -18,7 +19,7 @@ public class UserInfoInterceptor extends BaseInfoProperties implements HandlerIn
     public static ThreadLocal<Admin> currentAdmin = new ThreadLocal<>();
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         // 当前线程有且仅有一种用户登录 app、saas、admin
 
@@ -30,7 +31,7 @@ public class UserInfoInterceptor extends BaseInfoProperties implements HandlerIn
         }
 
         if (StringUtils.isNotBlank(userJson)) {
-            Users users = new Gson().fromJson(userJson, Users.class);
+            Users users = GsonUtils.stringToBean(userJson, Users.class);
             currentUser.set(users);
         }
 
@@ -38,7 +39,7 @@ public class UserInfoInterceptor extends BaseInfoProperties implements HandlerIn
         String adminJson = request.getHeader(ADMIN_USER_JSON);
 
         if (StringUtils.isNotBlank(adminJson)) {
-            Admin admin = new Gson().fromJson(adminJson, Admin.class);
+            Admin admin = GsonUtils.stringToBean(adminJson, Admin.class);
             currentAdmin.set(admin);
         }
 
@@ -46,12 +47,9 @@ public class UserInfoInterceptor extends BaseInfoProperties implements HandlerIn
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         // 注意移除Threadlocal
         currentUser.remove();
-
         currentAdmin.remove();
-
     }
 }

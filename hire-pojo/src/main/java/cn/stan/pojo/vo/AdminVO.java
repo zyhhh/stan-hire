@@ -6,12 +6,18 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @ToString
-public class SaasUserVO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class AdminVO {
 
+    /**
+     * 登录名
+     */
     private String username;
-    private String name;
+
+    /**
+     * 头像
+     */
     private String face;
 }

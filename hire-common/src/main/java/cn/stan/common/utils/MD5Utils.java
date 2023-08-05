@@ -10,13 +10,12 @@ public class MD5Utils {
     /**
      * MD5混合加密
      * @param data: 待加密字符串
-     * @param slat: 盐，用于混合md5加密
+     * @param salt: 盐，用于混合md5加密
      * @return
      */
-    public static String encrypt(String data, String slat) {
-        String base = data + slat;
-        String md5 = DigestUtils.md5DigestAsHex(base.getBytes());
-        return md5;
+    public static String encrypt(String data, String salt) {
+        String base = data + salt;
+        return DigestUtils.md5DigestAsHex(base.getBytes());
     }
 
     public static void main(String[] args) {

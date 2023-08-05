@@ -86,8 +86,7 @@ public class GsonUtils {
         List<T> list = null;
         if (gson != null) {
             // 根据泛型返回解析指定的类型,TypeToken<List<T>>{}.getType()获取返回类型
-            list = gson.fromJson(gsonString, new TypeToken<List<T>>() {
-            }.getType());
+            list = gson.fromJson(gsonString, new TypeToken<List<T>>(){}.getType());
         }
         return list;
     }
@@ -109,12 +108,10 @@ public class GsonUtils {
      * @param gsonString
      * @return
      */
-    public static <T> List<Map<String, T>> stringToListMaps(String gsonString) {
+    public static <T> List<Map<String, T>> stringToListMap(String gsonString) {
         List<Map<String, T>> list = null;
         if (gson != null) {
-            list = gson.fromJson(gsonString,
-                    new TypeToken<List<Map<String, T>>>() {
-                    }.getType());
+            list = gson.fromJson(gsonString, new TypeToken<List<Map<String, T>>>(){}.getType());
         }
         return list;
     }
@@ -125,11 +122,10 @@ public class GsonUtils {
      * @param gsonString
      * @return
      */
-    public static <T> Map<String, T> stringToMaps(String gsonString) {
+    public static <T> Map<String, T> stringToMap(String gsonString) {
         Map<String, T> map = null;
         if (gson != null) {
-            map = gson.fromJson(gsonString, new TypeToken<Map<String, T>>() {
-            }.getType());
+            map = gson.fromJson(gsonString, new TypeToken<Map<String, T>>(){}.getType());
         }
         return map;
     }

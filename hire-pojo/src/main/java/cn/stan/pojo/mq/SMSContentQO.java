@@ -10,10 +10,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SMSContentQO {
+
     // 手机号
     private String mobile;
+
     // 内容
     private String content;
+
     // 过期时间，分钟
     private String expireTime;
 }

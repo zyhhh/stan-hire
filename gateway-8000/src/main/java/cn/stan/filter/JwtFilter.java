@@ -4,6 +4,7 @@ import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.result.GraceResult;
 import cn.stan.common.result.ResponseStatusEnum;
 import cn.stan.common.utils.ExcludeUrlProperties;
+import cn.stan.common.utils.GsonUtils;
 import cn.stan.common.utils.JWTUtils;
 import com.google.gson.Gson;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -61,7 +62,7 @@ public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Order
             }
         }
 
-        log.info("被拦截了...");
+        log.info("url被JwtFilter拦截了");
 
         // 获取header中的token
         HttpHeaders headers = exchange.getRequest().getHeaders();
@@ -142,7 +143,7 @@ public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Order
         }
 
         // 4.错误对象转成json并设置进response中
-        String resultJson = new Gson().toJson(GraceResult.error(statusEnum));
+        String resultJson = GsonUtils.objectToString(GraceResult.error(statusEnum));
         DataBuffer dataBuffer = response.bufferFactory().wrap(resultJson.getBytes(StandardCharsets.UTF_8));
 
         return response.writeWith(Mono.just(dataBuffer));

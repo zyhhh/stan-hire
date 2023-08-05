@@ -3,6 +3,7 @@ package cn.stan.controller;
 import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.result.GraceResult;
 import cn.stan.common.result.ResponseStatusEnum;
+import cn.stan.common.utils.GsonUtils;
 import cn.stan.common.utils.JWTUtils;
 import cn.stan.pojo.Users;
 import cn.stan.pojo.vo.SaasUserVO;
@@ -146,7 +147,7 @@ public class SaasPassportController extends BaseInfoProperties {
 
             // 存入用户信息到redis中，因为H5在未登录的情况下，拿不到用户id，所以暂存用户信息到redis。
             // ** 如果使用websocket是可以直接通信H5获得用户id，则无此问题
-            redisUtils.set(REDIS_SAAS_USER_INFO + ":temp:" + preToken, new Gson().toJson(hrUser), 5 * 60L);
+            redisUtils.set(REDIS_SAAS_USER_INFO + ":temp:" + preToken, GsonUtils.objectToString(hrUser), 5 * 60L);
         }
 
         return GraceResult.ok();
@@ -183,7 +184,7 @@ public class SaasPassportController extends BaseInfoProperties {
     public GraceResult info(String token) {
 
         String userJson = redisUtils.get(REDIS_SAAS_USER_INFO + ":" + token);
-        Users saasUser = new Gson().fromJson(userJson, Users.class);
+        Users saasUser = GsonUtils.stringToBean(userJson, Users.class);
 
         SaasUserVO saasUserVO = new SaasUserVO();
         BeanUtils.copyProperties(saasUser, saasUserVO);
