@@ -77,14 +77,14 @@ public class PassportController extends BaseInfoProperties {
         // smsUtil.sendSMS(mobile, code, String.valueOf(expireTime));
 
         // 将验证码存于Redis中
-        redisUtils.set(MOBILE_SMSCODE + ":" + mobile, code, expireTime * 60);
+        redisUtils.set(MOBILE_SMSCODE + ":" + mobile, code, expireTime * 60L);
 
         return GraceResult.ok();
     }
 
     private void sendSmsWithMQ(SMSContentQO contentQO) {
 
-        // 定义confirm回调，不管交换机是否成功收到消息都会进入
+        // 定义confirm回调，消息->交换机，不管交换机是否成功收到消息都会进入
         // correlationData--相关性参数, ack--交换机是否成功收到消息, cause--失败原因
         rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
             log.info(">>>> 进入 confirmCallback");
@@ -92,14 +92,14 @@ public class PassportController extends BaseInfoProperties {
             log.info("correlationData: {}", correlationData.getId());
             if (ack) {
                 // 成功时，cause为null
-                log.info("交换机成功接收到消息，{}", cause);
+                log.info("交换机成功接收到消息");
             } else {
                 // 失败时，cause有值
                 log.info("交换机接收到消息失败，失败原因：{}", cause);
             }
         });
 
-        // 定义return回调，消息没有正确路由到队列中则进入
+        // 定义return回调，交换机->队列，消息没有正确路由到队列中则进入
         rabbitTemplate.setReturnsCallback(returnedMsg -> {
             log.info(">>>> 进入 returnCallback");
             log.info("returnedMsg: {}", GsonUtils.objectToString(returnedMsg));

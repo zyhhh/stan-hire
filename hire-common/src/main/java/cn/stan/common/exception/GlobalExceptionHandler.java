@@ -5,6 +5,7 @@ import cn.stan.common.result.ResponseStatusEnum;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,11 +17,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     /**
      * 捕获自定义异常
+     *
      * @param ex
      * @return
      */
@@ -31,6 +34,7 @@ public class GlobalExceptionHandler {
 
     /**
      * 捕获jwt解析相关异常
+     *
      * @param ex
      * @return
      */
@@ -42,12 +46,13 @@ public class GlobalExceptionHandler {
             io.jsonwebtoken.security.SignatureException.class
     })
     public GraceResult handleJWTException(SignatureException ex) {
-        ex.printStackTrace();
+        log.error(ex.getMessage(), ex);
         return GraceResult.error(ResponseStatusEnum.JWT_SIGNATURE_ERROR);
     }
 
     /**
      * 捕获参数校验异常
+     *
      * @param ex
      * @return
      */

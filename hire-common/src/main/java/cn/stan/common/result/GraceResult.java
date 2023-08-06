@@ -1,6 +1,7 @@
 package cn.stan.common.result;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 自定义响应数据类型枚举升级版本
@@ -119,6 +120,24 @@ public class GraceResult {
      */
     public static GraceResult errorTicket() {
         return new GraceResult(ResponseStatusEnum.TICKET_INVALID);
+    }
+
+    /**
+     * 校验返回结果是否成功，即status为200
+     *
+     * @return
+     */
+    public boolean isOk() {
+        return Objects.equals(this.status, ResponseStatusEnum.SUCCESS.status());
+    }
+
+    /**
+     * 校验返回结果是否失败，即status不为200
+     *
+     * @return
+     */
+    public boolean isFail() {
+        return !isOk();
     }
 
     public Integer getStatus() {

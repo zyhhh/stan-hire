@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "work-service")
 public interface WorkFeign {
 
+    /**
+     * 初始化简历
+     * @param userId
+     * @return
+     */
     @PostMapping("/resume/init")
-    GraceResult init(@RequestParam("userId") String userId);
+    GraceResult initResume(@RequestParam("userId") String userId);
 }
