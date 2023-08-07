@@ -58,8 +58,8 @@ public class UsersServiceImpl implements UsersService {
         return usersMapper.selectOne(new QueryWrapper<Users>().eq("mobile", mobile));
     }
 
-    // @Transactional(rollbackFor = {Exception.class})
-    @GlobalTransactional
+    // @GlobalTransactional
+    @Transactional(rollbackFor = {Exception.class})
     @Override
     public Users createUsers(String mobile) {
 
@@ -95,7 +95,7 @@ public class UsersServiceImpl implements UsersService {
         usersMapper.insert(user);
 
         // 初始化简历
-        GraceResult graceResult = workFeign.initResume(user.getId());
+        workFeign.initResume(user.getId());
         // 解决workFeign方法报错被全局异常捕获，无法回滚问题
         /*if (graceResult.isFail()) {
             String xid = RootContext.getXID();

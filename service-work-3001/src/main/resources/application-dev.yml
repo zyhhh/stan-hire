@@ -21,21 +21,21 @@ spring:
         server-addr: @virtualIp@:8848
 
 # seata 分布式事务配置
-seata:
-  enabled: true
-  tx-service-group: hire_tx_group
-  service:
-    vgroup-mapping:
-      hire_tx_group: SEATA_GROUP
-    grouplist:
-      SEATA_GROUP: @virtualIp@:8091
-  config:
-    nacos:
-      server-addr: @virtualIp@:8848
-      username: nacos
-      password: nacos
-  registry:
-    nacos:
-      server-addr: @virtualIp@:8848
-      username: nacos
-      password: nacos
+#seata:
+#  enabled: true
+#  tx-service-group: hire_tx_group
+#  service:
+#    vgroup-mapping:
+#      hire_tx_group: SEATA_GROUP
+#    grouplist:
+#      SEATA_GROUP: @virtualIp@:8091
+#  config:
+#    nacos:
+#      server-addr: @virtualIp@:8848
+#      username: nacos
+#      password: nacos
+#  registry:
+#    nacos:
+#      server-addr: @virtualIp@:8848
+#      username: nacos
+#      password: nacos
