@@ -1,0 +1,11 @@
+server:
+  port: 5001
+  tomcat:
+    uri-encoding: UTF-8
+    max-swallow-size: -1
+
+spring:
+  application:
+    name: file-service
+  profiles:
+    active: @activeEnv@
