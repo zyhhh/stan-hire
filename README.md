@@ -1,4 +1,4 @@
-# stan-hire-dev
+# stan-hire
 
 #### 介绍
 仿BOSS直聘项目
