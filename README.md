@@ -1,11 +1,11 @@
-# imooc-hire-dev
+# stan-hire-dev
 
 #### 介绍
 仿BOSS直聘项目
 
 #### 软件架构
 软件架构说明
-
+本项目依赖组件：mysql、nacos、redis、rabbitmq..（更新ing）
 
 #### 安装教程
 
@@ -15,7 +15,6 @@
 
 #### 使用说明
 
-本项目依赖组件：mysql、nacos、redis、rabbitmq..（待更新）
 1. 默认所有通用组件部署在同一台服务器上，运行前请修改父工程pom文件下`<virtualIp>`标签的ip地址
 2. 本项目加入腾讯云短信服务，运行前请修改common包下`tencentCloud.properties`的配置以及`SMSUtils.java`代码中的应用ID、签名、模板ID
 3. nacos需要加入配置`jwt_config.yaml`，键为`jwt.key`，该key用于加密jwt。详见网关服务下`bootstrap.yml`
