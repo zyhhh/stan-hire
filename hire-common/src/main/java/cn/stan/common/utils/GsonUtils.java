@@ -3,7 +3,6 @@ package cn.stan.common.utils;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +59,7 @@ public class GsonUtils {
     }
 
     /**
-     * 将json转成特定的cls的对象
+     * 将json转成特定的class对象
      *
      * @param gsonString
      * @param cls
@@ -86,21 +85,11 @@ public class GsonUtils {
         List<T> list = null;
         if (gson != null) {
             // 根据泛型返回解析指定的类型,TypeToken<List<T>>{}.getType()获取返回类型
-            list = gson.fromJson(gsonString, new TypeToken<List<T>>(){}.getType());
+            list = gson.fromJson(gsonString, new TypeToken<List<T>>() {
+            }.getType());
         }
         return list;
     }
-
-    public static <T> List<T> stringToListAnother(String gsonString, Class<T> cls) {
-        List<T> list = new ArrayList<>();
-        JsonArray jsonArray = new JsonParser().parse(gsonString).getAsJsonArray();
-        Gson gson = new Gson();
-        for (JsonElement jsonElement : jsonArray) {
-            list.add(gson.fromJson(jsonElement, cls));
-        }
-        return list;
-    }
-
 
     /**
      * json字符串转成list中有map的
@@ -111,7 +100,8 @@ public class GsonUtils {
     public static <T> List<Map<String, T>> stringToListMap(String gsonString) {
         List<Map<String, T>> list = null;
         if (gson != null) {
-            list = gson.fromJson(gsonString, new TypeToken<List<Map<String, T>>>(){}.getType());
+            list = gson.fromJson(gsonString, new TypeToken<List<Map<String, T>>>() {
+            }.getType());
         }
         return list;
     }
@@ -125,7 +115,8 @@ public class GsonUtils {
     public static <T> Map<String, T> stringToMap(String gsonString) {
         Map<String, T> map = null;
         if (gson != null) {
-            map = gson.fromJson(gsonString, new TypeToken<Map<String, T>>(){}.getType());
+            map = gson.fromJson(gsonString, new TypeToken<Map<String, T>>() {
+            }.getType());
         }
         return map;
     }
@@ -137,6 +128,5 @@ public class GsonUtils {
     public static Integer jsonElementAsInt(JsonElement jsonElement) {
         return jsonElement == null ? null : jsonElement.getAsInt();
     }
-
 
 }

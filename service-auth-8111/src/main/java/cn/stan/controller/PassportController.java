@@ -13,7 +13,6 @@ import cn.stan.pojo.bo.RegistLoginBO;
 import cn.stan.pojo.mq.SMSContentQO;
 import cn.stan.pojo.vo.UsersVO;
 import cn.stan.service.UsersService;
-import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
@@ -142,7 +141,7 @@ public class PassportController extends BaseInfoProperties {
         // 创建jwt，有效时间为60s（无状态token）
         // String jwt = jwtUtil.createJWTWithPrefix(GsonUtils.objectToString(user), 60 * 1000L, TOKEN_USER_PREFIX);
         // 创建jwt，无失效时间（无状态token）
-        String jwt = jwtUtils.createJWTWithPrefix(GsonUtils.objectToString(user), TOKEN_USER_PREFIX);
+        String jwt = jwtUtils.createToken(GsonUtils.objectToString(user), TOKEN_USER_PREFIX);
 
         // 4.删除redis中验证码
         redisUtils.del(MOBILE_SMSCODE + ":" + mobile);

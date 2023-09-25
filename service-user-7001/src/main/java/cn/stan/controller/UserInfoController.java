@@ -48,7 +48,7 @@ public class UserInfoController extends BaseInfoProperties {
     private UsersVO getUserInfo(String userId) {
         Users latestUser = usersService.getById(userId);
 
-        String token = jwtUtils.createJWTWithPrefix(GsonUtils.objectToString(latestUser), TOKEN_USER_PREFIX);
+        String token = jwtUtils.createToken(GsonUtils.objectToString(latestUser), TOKEN_USER_PREFIX);
 
         UsersVO usersVO = new UsersVO();
         BeanUtils.copyProperties(latestUser, usersVO);

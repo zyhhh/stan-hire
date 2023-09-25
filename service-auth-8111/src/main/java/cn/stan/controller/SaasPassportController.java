@@ -8,7 +8,6 @@ import cn.stan.common.utils.JWTUtils;
 import cn.stan.pojo.Users;
 import cn.stan.pojo.vo.SaasUserVO;
 import cn.stan.service.UsersService;
-import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -172,7 +171,7 @@ public class SaasPassportController extends BaseInfoProperties {
             return GraceResult.error(ResponseStatusEnum.USER_NOT_EXIST_ERROR);
 
         // 确认执行登录后，生成saas用户的token，并且长期有效
-        String saasUserToken = jwtUtils.createJWTWithPrefix(userJson, TOKEN_SAAS_PREFIX);
+        String saasUserToken = jwtUtils.createToken(userJson, TOKEN_SAAS_PREFIX);
 
         // 存入用户信息，长期有效
         redisUtils.set(REDIS_SAAS_USER_INFO + ":" + saasUserToken, userJson);

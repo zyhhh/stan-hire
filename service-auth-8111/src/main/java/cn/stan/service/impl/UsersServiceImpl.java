@@ -97,7 +97,8 @@ public class UsersServiceImpl implements UsersService {
         // 初始化简历
         workFeign.initResume(user.getId());
         // 解决workFeign方法报错被全局异常捕获，无法回滚问题
-        /*if (graceResult.isFail()) {
+        /*GraceResult graceResult = workFeign.initResume(user.getId());
+        if (graceResult.isFail()) {
             String xid = RootContext.getXID();
             if (StringUtils.isNotBlank(xid)) {
                 try {
