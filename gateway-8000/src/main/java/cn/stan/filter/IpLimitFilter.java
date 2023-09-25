@@ -27,6 +27,9 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+/**
+ * 该过滤器用于限制同一ip在单位时间内只能请求限流接口n次
+ */
 @Slf4j
 @Component
 public class IpLimitFilter extends BaseInfoProperties implements GlobalFilter, Ordered {
@@ -51,7 +54,7 @@ public class IpLimitFilter extends BaseInfoProperties implements GlobalFilter, O
         String path = exchange.getRequest().getURI().getPath();
 
         // 获取需要进行ip限流的接口
-        List<String> ipLimitUrls = excludeUrlProperties.getIpLimitUrl();
+        List<String> ipLimitUrls = excludeUrlProperties.getIpLimitUrls();
 
         if (!CollectionUtils.isEmpty(ipLimitUrls)) {
             boolean match = ipLimitUrls.stream().anyMatch(url -> antPathMatcher.matchStart(path, url));
@@ -75,7 +78,7 @@ public class IpLimitFilter extends BaseInfoProperties implements GlobalFilter, O
         String ip = IPUtils.getIP(request);
 
         // 设置redis的键
-        String ipKey = "gateway-ip:" + ip + ":" + path;
+        String ipCountKey = "gateway-ip:" + ip + ":" + path;
         String ipLimitKey = "gateway-ip-limit:" + ip + ":" + path;
 
         // 1.校验当前ip是否已被限制
@@ -85,11 +88,11 @@ public class IpLimitFilter extends BaseInfoProperties implements GlobalFilter, O
         }
 
         // 2.判断当前ip请求接口的次数
-        long reqCount = redisUtils.increment(ipKey, 1);
+        long reqCount = redisUtils.increment(ipCountKey, 1);
 
         // 若第一次进来，设置接口的限制时间
         if (reqCount == 1) {
-            redisUtils.expire(ipKey, timeInterval);
+            redisUtils.expire(ipCountKey, timeInterval);
         }
 
         // 如果访问次数达到限制，则进行限流并返回错误

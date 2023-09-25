@@ -37,6 +37,10 @@ spring:
           uri: lb://work-service
           predicates:
             - Path=/resume/**
+        - id: fileRoute
+          uri: lb://file-service
+          predicates:
+            - Path=/file/**
       # 网关跨域配置
       globalcors:
         cors-configurations:

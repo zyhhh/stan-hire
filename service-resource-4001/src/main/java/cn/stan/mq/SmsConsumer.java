@@ -15,18 +15,6 @@ public class SmsConsumer {
     @Autowired
     private SMSUtils smsUtils;
 
-    /*@RabbitListener(queues = {RabbitMQConfig.SMS_QUEUE})
-    public void listenSmsMsg(String payload, Message message) {
-
-        String routingKey = message.getMessageProperties().getReceivedRoutingKey();
-        log.info("routingKey = {}, payload = {}", routingKey, payload);
-
-        if (routingKey.equalsIgnoreCase(RabbitMQConfig.ROUTING_KEY_SMS_SEND_LOGIN)) {
-            SMSContentQO smsContentQO = GsonUtil.stringToBean(payload, SMSContentQO.class);
-            smsUtil.sendSMS(smsContentQO.getMobile(), smsContentQO.getContent(), smsContentQO.getExpireTime());
-        }
-    }*/
-
     /**
      * 消息手动ack确认
      * @param message

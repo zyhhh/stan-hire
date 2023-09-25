@@ -35,8 +35,8 @@ public class UserInfoController extends BaseInfoProperties {
      * @param modifyUserBO
      * @return
      */
-    @PostMapping("create")
-    public GraceResult create(@Valid @RequestBody ModifyUserBO modifyUserBO) {
+    @PostMapping("modify")
+    public GraceResult modify(@Valid @RequestBody ModifyUserBO modifyUserBO) {
         // 修改用户信息
         usersService.modifyUserInfo(modifyUserBO);
         // 返回最新用户信息，包含token

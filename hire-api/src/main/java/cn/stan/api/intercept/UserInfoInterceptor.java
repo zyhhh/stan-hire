@@ -12,6 +12,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 该拦截器用于解析header中的用户信息，并设置进ThreadLocal中
+ */
 @Slf4j
 public class UserInfoInterceptor extends BaseInfoProperties implements HandlerInterceptor {
 
@@ -48,7 +51,7 @@ public class UserInfoInterceptor extends BaseInfoProperties implements HandlerIn
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        // 注意移除Threadlocal
+        // 移除ThreadLocal
         currentUser.remove();
         currentAdmin.remove();
     }
