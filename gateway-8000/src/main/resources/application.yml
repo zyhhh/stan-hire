@@ -10,7 +10,8 @@ spring:
   profiles:
     active: @activeEnv@
 
+# 接口限流配置
 blackIP:
-  continueCounts: ${counts:3}    # ip连续请求的次数
+  maxCountLimit: ${counts:3}    # ip连续请求的最大次数
   timeInterval: ${interval:20}   # ip判断的时间间隔，单位：秒
-  limitTimes: ${times:30}        # 达到频率限制后需等待的时间，单位：秒
+  timeLimits: ${times:30}        # 达到频率限制后需等待的时间，单位：秒

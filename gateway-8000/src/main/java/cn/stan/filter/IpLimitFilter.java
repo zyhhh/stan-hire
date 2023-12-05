@@ -3,10 +3,9 @@ package cn.stan.filter;
 import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.result.GraceResult;
 import cn.stan.common.result.ResponseStatusEnum;
-import cn.stan.common.utils.ExcludeUrlProperties;
+import cn.stan.common.property.ExcludeUrlProperties;
 import cn.stan.common.utils.GsonUtils;
 import cn.stan.common.utils.IPUtils;
-import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +26,9 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+/**
+ * 接口限流
+ */
 @Slf4j
 @Component
 public class IpLimitFilter extends BaseInfoProperties implements GlobalFilter, Ordered {
@@ -37,12 +39,12 @@ public class IpLimitFilter extends BaseInfoProperties implements GlobalFilter, O
     @Autowired
     private ExcludeUrlProperties excludeUrlProperties;
 
-    @Value("${blackIP.continueCounts}")
-    private Integer continueCounts;
+    @Value("${blackIP.maxCountLimit}")
+    private Integer maxCountLimit;
     @Value("${blackIP.timeInterval}")
     private Integer timeInterval;
-    @Value("${blackIP.limitTimes}")
-    private Integer limitTimes;
+    @Value("${blackIP.timeLimits}")
+    private Integer timeLimits;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -75,26 +77,25 @@ public class IpLimitFilter extends BaseInfoProperties implements GlobalFilter, O
         String ip = IPUtils.getIP(request);
 
         // 设置redis的键
-        String ipKey = "gateway-ip:" + ip + ":" + path;
+        String ipPathKey = "gateway-ip-path:" + ip + ":" + path;
         String ipLimitKey = "gateway-ip-limit:" + ip + ":" + path;
 
-        // 1.校验当前ip是否已被限制
+        // 1.校验当前ip是否已被限制，已被限制直接返回
         long ttl = redisUtils.ttl(ipLimitKey);
         if (ttl > 0) {
             return renderErrorMsg(exchange, ResponseStatusEnum.SYSTEM_ERROR_BLACK_IP);
         }
 
-        // 2.判断当前ip请求接口的次数
-        long reqCount = redisUtils.increment(ipKey, 1);
-
-        // 若第一次进来，设置接口的限制时间
+        // 2.设置当前ip请求接口的次数
+        long reqCount = redisUtils.increment(ipPathKey, 1);
+        // 第一次请求，需要设置接口的限制时间
         if (reqCount == 1) {
-            redisUtils.expire(ipKey, timeInterval);
+            redisUtils.expire(ipPathKey, timeInterval);
         }
 
-        // 如果访问次数达到限制，则进行限流并返回错误
-        if (reqCount > continueCounts) {
-            redisUtils.set(ipLimitKey, "1", limitTimes);
+        // 单位时间内ip请求接口的次数达到限制，则进行限流并返回错误
+        if (reqCount > maxCountLimit) {
+            redisUtils.set(ipLimitKey, "1", timeLimits);
             return renderErrorMsg(exchange, ResponseStatusEnum.SYSTEM_ERROR_BLACK_IP);
         }
 

@@ -6,7 +6,7 @@ import cn.stan.pojo.Stu;
 import cn.stan.pojo.Users;
 import cn.stan.service.StuService;
 import cn.stan.common.utils.SMSUtils;
-import cn.stan.common.utils.TencentCloudProperties;
+import cn.stan.common.property.TencentCloudProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

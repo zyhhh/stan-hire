@@ -1,4 +1,4 @@
-package cn.stan.common.utils;
+package cn.stan.common.property;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

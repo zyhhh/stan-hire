@@ -1,5 +1,6 @@
 package cn.stan.common.utils;
 
+import cn.stan.common.property.TencentCloudProperties;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.common.profile.ClientProfile;
