@@ -13,7 +13,6 @@ import cn.stan.pojo.bo.RegistLoginBO;
 import cn.stan.pojo.mq.SMSContentQO;
 import cn.stan.pojo.vo.UsersVO;
 import cn.stan.service.UsersService;
-import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
@@ -63,9 +62,10 @@ public class PassportController extends BaseInfoProperties {
         // 6位随机数
         String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
         log.info("验证码: {}", code);
-
-        // 过期时间，分钟
+        // 过期时间，单位分钟
         int expireTime = 5;
+        // 将验证码存于Redis中，默认5分钟
+        redisUtils.set(MOBILE_SMSCODE + ":" + mobile, code, expireTime * 60L);
 
         // 组装消息对象
         SMSContentQO contentQO = new SMSContentQO();
@@ -73,19 +73,20 @@ public class PassportController extends BaseInfoProperties {
         contentQO.setContent(code);
         contentQO.setExpireTime(String.valueOf(expireTime));
 
-        sendSmsWithMQ(contentQO);
-        // smsUtil.sendSMS(mobile, code, String.valueOf(expireTime));
-
-        // 将验证码存于Redis中
-        redisUtils.set(MOBILE_SMSCODE + ":" + mobile, code, expireTime * 60L);
+        sendSmsMessage(contentQO);
+        // smsUtils.sendSMS(mobile, code, String.valueOf(expireTime));
 
         return GraceResult.ok();
     }
 
-    private void sendSmsWithMQ(SMSContentQO contentQO) {
+    private void sendSmsMessage(SMSContentQO contentQO) {
 
         // 定义confirm回调，消息->交换机，不管交换机是否成功收到消息都会进入
-        // correlationData--相关性参数, ack--交换机是否成功收到消息, cause--失败原因
+        /**
+         * correlationData：相关性参数
+         * ack：交换机是否成功收到消息
+         * cause：失败原因
+         */
         rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
             log.info(">>>> 进入 confirmCallback");
             assert correlationData != null;
@@ -142,7 +143,7 @@ public class PassportController extends BaseInfoProperties {
         // 创建jwt，有效时间为60s（无状态token）
         // String jwt = jwtUtil.createJWTWithPrefix(GsonUtils.objectToString(user), 60 * 1000L, TOKEN_USER_PREFIX);
         // 创建jwt，无失效时间（无状态token）
-        String jwt = jwtUtils.createJWTWithPrefix(GsonUtils.objectToString(user), TOKEN_USER_PREFIX);
+        String jwt = jwtUtils.createToken(GsonUtils.objectToString(user), TOKEN_USER_PREFIX);
 
         // 4.删除redis中验证码
         redisUtils.del(MOBILE_SMSCODE + ":" + mobile);

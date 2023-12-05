@@ -10,6 +10,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 该拦截器用于限制同一ip，60秒内只能请求一次短信验证码
+ */
 @Slf4j
 public class SMSInterceptor extends BaseInfoProperties implements HandlerInterceptor {
     @Override

@@ -1,0 +1,6 @@
+spring:
+  # nacos 注册中心
+  cloud:
+    nacos:
+      discovery:
+        server-addr: @virtualIp@:8848

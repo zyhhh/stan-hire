@@ -29,53 +29,47 @@ public class JWTUtils {
     // @Autowired
     // private JWTProperties jwtProperties;
 
-    public String createJWT(String body) {
-
-        return buildJWT(body, null);
+    public String createToken(String body) {
+        return generateToken(body, null);
     }
 
-    public String createJWT(String body, Long expireTime) {
-
+    public String createToken(String body, Long expireTime) {
         if (expireTime == null)
             GraceException.display(ResponseStatusEnum.SYSTEM_NO_EXPIRE_ERROR);
 
         if (expireTime < 0)
             GraceException.display(ResponseStatusEnum.SYSTEM_EXPIRE_TIME_ERROR);
 
-        return buildJWT(body, expireTime);
+        return generateToken(body, expireTime);
     }
 
-    public String createJWTWithPrefix(String body, String prefix) {
-
-        return prefix + AT + buildJWT(body, null);
+    public String createToken(String body, String prefix) {
+        return prefix + AT + generateToken(body, null);
     }
 
-    public String createJWTWithPrefix(String body, Long expireTime, String prefix) {
-
+    public String createToken(String body, String prefix, Long expireTime) {
         if (expireTime == null)
             GraceException.display(ResponseStatusEnum.SYSTEM_NO_EXPIRE_ERROR);
 
         if (expireTime < 0)
             GraceException.display(ResponseStatusEnum.SYSTEM_EXPIRE_TIME_ERROR);
 
-        return prefix + AT + buildJWT(body, expireTime);
+        return prefix + AT + generateToken(body, expireTime);
     }
 
     /**
-     * 处理生成 jwt 主要方法
+     * 处理生成jwt主要方法
      *
      * @param body
      * @param expireTime
      * @return
      */
-    public String buildJWT(String body, Long expireTime) {
-
+    public String generateToken(String body, Long expireTime) {
         // 1.获取secretKey
         SecretKey secretKey = generateSecretKey();
 
-        String jwtToken;
-
         // 2.生成jwtToken
+        String jwtToken;
         if (expireTime == null) {
             jwtToken = generateJWT(body, secretKey);
         } else {
@@ -86,7 +80,7 @@ public class JWTUtils {
     }
 
     /**
-     * 校验 jwt，返回数据
+     * 校验jwt，返回数据
      *
      * @param jwtStr
      * @return
@@ -105,7 +99,7 @@ public class JWTUtils {
     }
 
     /**
-     * 生成 SecretKey
+     * 生成SecretKey
      *
      * @return
      */
@@ -119,14 +113,13 @@ public class JWTUtils {
     }
 
     /**
-     * 生成 jwt
+     * 生成jwt，无过期时间
      *
      * @param body
      * @param secretKey
      * @return
      */
     public String generateJWT(String body, SecretKey secretKey) {
-
         return Jwts.builder()
                 .setSubject(body)
                 .signWith(secretKey)
@@ -134,7 +127,7 @@ public class JWTUtils {
     }
 
     /**
-     * 生成 jwt，带过期时间
+     * 生成jwt，带过期时间
      *
      * @param body
      * @param expireTime
@@ -142,9 +135,7 @@ public class JWTUtils {
      * @return
      */
     public String generateJWT(String body, Long expireTime, SecretKey secretKey) {
-
         Date expireDate = new Date(System.currentTimeMillis() + expireTime);
-
         return Jwts.builder()
                 .setSubject(body)
                 .setExpiration(expireDate)

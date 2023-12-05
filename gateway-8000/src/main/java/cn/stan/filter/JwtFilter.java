@@ -28,6 +28,9 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+/**
+ * 该过滤器用于解析Token，并将用户信息存入header中
+ */
 @Slf4j
 @Component
 public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Ordered {
@@ -51,49 +54,51 @@ public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Order
         // log.info("请求路径: {}", path);
 
         // 获取免鉴权的接口
-        List<String> excludeUrls = excludeUrlProperties.getUrl();
+        List<String> noAuthUrls = excludeUrlProperties.getNoAuthUrls();
 
-        if (!CollectionUtils.isEmpty(excludeUrls)) {
-            boolean isExclude = excludeUrls.stream().anyMatch(url -> antPathMatcher.matchStart(path, url));
+        if (!CollectionUtils.isEmpty(noAuthUrls)) {
+            boolean isExclude = noAuthUrls.stream().anyMatch(url -> antPathMatcher.matchStart(path, url));
             // 匹配成功则直接放行
             if (isExclude) {
                 return chain.filter(exchange);
             }
         }
-
-        log.info("url被JwtFilter拦截了");
+        // log.info("url被JwtFilter拦截了");
 
         // 获取header中的token
         HttpHeaders headers = exchange.getRequest().getHeaders();
         String token = headers.getFirst(HEADER_USER_TOKEN);
-        if (StringUtils.isNotBlank(token)) {
-            // 验证token
-            String[] split = token.split(JWTUtils.AT);
-            if (split.length < 2) {
-                return renderErrorMsg(exchange, ResponseStatusEnum.JWT_ERROR);
-            }
 
-            String prefix = split[0];
-            String jwt = split[1];
-
-            // 判断针对不同用户存不同的键
-            if (TOKEN_USER_PREFIX.equalsIgnoreCase(prefix)) {
-                prefix = APP_USER_JSON;
-            } else if (TOKEN_SAAS_PREFIX.equalsIgnoreCase(prefix)) {
-                prefix = SAAS_USER_JSON;
-            } else if (TOKEN_ADMIN_PREFIX.equalsIgnoreCase(prefix)) {
-                prefix = ADMIN_USER_JSON;
-            }
-
-            return checkJWT(jwt, prefix, exchange, chain);
+        // 无Token不放行。网关抛出异常无法被全局异常捕获，需要重新构建response
+        if (StringUtils.isBlank(token)) {
+            return renderErrorMsg(exchange, ResponseStatusEnum.UN_LOGIN);
         }
 
-        // 不放行。网关抛出异常无法被全局异常捕获，需要重新构建response
-        return renderErrorMsg(exchange, ResponseStatusEnum.UN_LOGIN);
+        // 验证token
+        String[] split = token.split(JWTUtils.AT);
+        if (split.length < 2) {
+            return renderErrorMsg(exchange, ResponseStatusEnum.JWT_ERROR);
+        }
+
+        String prefix = split[0];
+        String jwt = split[1];
+
+        // 判断针对不同用户存不同的键
+        if (TOKEN_USER_PREFIX.equalsIgnoreCase(prefix)) {
+            prefix = APP_USER_JSON;
+        } else if (TOKEN_SAAS_PREFIX.equalsIgnoreCase(prefix)) {
+            prefix = SAAS_USER_JSON;
+        } else if (TOKEN_ADMIN_PREFIX.equalsIgnoreCase(prefix)) {
+            prefix = ADMIN_USER_JSON;
+        }
+
+        // jwt校验并设置进header中
+        return verifyJWT(jwt, prefix, exchange, chain);
     }
 
     /**
      * 过滤器执行顺序，数字越小越先执行
+     *
      * @return
      */
     @Override
@@ -102,17 +107,17 @@ public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Order
     }
 
     /**
-     * 校验 jwt，错误抛出异常
+     * 校验jwt，错误抛出异常
      *
      * @param jwt
      * @param exchange
      * @param chain
      * @return
      */
-    public Mono<Void> checkJWT(String jwt, String jsonKey, ServerWebExchange exchange, GatewayFilterChain chain) {
+    public Mono<Void> verifyJWT(String jwt, String header, ServerWebExchange exchange, GatewayFilterChain chain) {
         try {
             String userJson = jwtUtils.checkJWT(jwt);
-            ServerWebExchange newExchange = setNewHeader(exchange, jsonKey, userJson);
+            ServerWebExchange newExchange = setNewHeader(exchange, header, userJson);
             return chain.filter(newExchange);
         } catch (ExpiredJwtException e) {
             return renderErrorMsg(exchange, ResponseStatusEnum.JWT_EXPIRE_ERROR);
@@ -152,14 +157,13 @@ public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Order
      * 设置新的请求头
      *
      * @param exchange
-     * @param key
+     * @param header
      * @param value
      * @return
      */
-    public ServerWebExchange setNewHeader(ServerWebExchange exchange, String key, String value) {
-
+    public ServerWebExchange setNewHeader(ServerWebExchange exchange, String header, String value) {
         // 重新构建新的request
-        ServerHttpRequest newRequest = exchange.getRequest().mutate().header(key, value).build();
+        ServerHttpRequest newRequest = exchange.getRequest().mutate().header(header, value).build();
 
         // 将新的request设置进exchange中
         return exchange.mutate().request(newRequest).build();

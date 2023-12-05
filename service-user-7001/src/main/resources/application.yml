@@ -17,4 +17,5 @@ mybatis-plus:
   global-config:
     banner: false   # 不展示mybatis-plus自带的banner
     db-config:
-      id-type: assign_id  # 设置数据库主键用雪花算法生成
+      id-type: assign_id    # 设置数据库主键用雪花算法生成
+      update-strategy: not_empty  # 字段非空字符串时才更新

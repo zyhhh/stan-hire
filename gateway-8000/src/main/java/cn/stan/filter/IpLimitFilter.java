@@ -6,6 +6,7 @@ import cn.stan.common.result.ResponseStatusEnum;
 import cn.stan.common.property.ExcludeUrlProperties;
 import cn.stan.common.utils.GsonUtils;
 import cn.stan.common.utils.IPUtils;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
- * 接口限流
+ * 该过滤器用于限制同一ip在单位时间内只能请求限流接口n次
  */
 @Slf4j
 @Component
@@ -53,7 +54,7 @@ public class IpLimitFilter extends BaseInfoProperties implements GlobalFilter, O
         String path = exchange.getRequest().getURI().getPath();
 
         // 获取需要进行ip限流的接口
-        List<String> ipLimitUrls = excludeUrlProperties.getIpLimitUrl();
+        List<String> ipLimitUrls = excludeUrlProperties.getIpLimitUrls();
 
         if (!CollectionUtils.isEmpty(ipLimitUrls)) {
             boolean match = ipLimitUrls.stream().anyMatch(url -> antPathMatcher.matchStart(path, url));

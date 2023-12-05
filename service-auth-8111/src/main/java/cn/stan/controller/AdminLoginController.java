@@ -44,7 +44,7 @@ public class AdminLoginController extends BaseInfoProperties {
             return GraceResult.error(ResponseStatusEnum.ADMIN_LOGIN_ERROR);
         }
 
-        String adminToken = jwtUtils.createJWTWithPrefix(GsonUtils.objectToString(loginAdmin), TOKEN_ADMIN_PREFIX);
+        String adminToken = jwtUtils.createToken(GsonUtils.objectToString(loginAdmin), TOKEN_ADMIN_PREFIX);
 
         return GraceResult.ok(adminToken);
     }

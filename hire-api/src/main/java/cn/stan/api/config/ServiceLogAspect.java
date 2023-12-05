@@ -12,6 +12,7 @@ import org.springframework.util.StopWatch;
 @Component
 @Aspect
 public class ServiceLogAspect {
+
     @Pointcut("execution(* cn.stan.service.impl..*.*(..))")
     public void servicePointcut() {
     }

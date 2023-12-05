@@ -10,16 +10,16 @@ import java.util.List;
 @Component
 @Data
 @PropertySource("classpath:excludeUrl.properties")
-@ConfigurationProperties(prefix = "exclude")
+@ConfigurationProperties(prefix = "path")
 public class ExcludeUrlProperties {
 
     /**
      * 无需鉴权的接口
      */
-    private List<String> url;
+    private List<String> noAuthUrls;
 
     /**
      * ip限流校验的接口
      */
-    private List<String> ipLimitUrl;
+    private List<String> ipLimitUrls;
 }
