@@ -30,26 +30,26 @@ public class GraceResult {
     }
 
     public GraceResult(Object data) {
-        this.status = ResponseStatusEnum.SUCCESS.status();
-        this.msg = ResponseStatusEnum.SUCCESS.msg();
-        this.success = ResponseStatusEnum.SUCCESS.success();
+        this.status = RespStatusEnum.SUCCESS.status();
+        this.msg = RespStatusEnum.SUCCESS.msg();
+        this.success = RespStatusEnum.SUCCESS.success();
         this.data = data;
     }
 
-    public GraceResult(ResponseStatusEnum responseStatus) {
+    public GraceResult(RespStatusEnum responseStatus) {
         this.status = responseStatus.status();
         this.msg = responseStatus.msg();
         this.success = responseStatus.success();
     }
 
-    public GraceResult(ResponseStatusEnum responseStatus, Object data) {
+    public GraceResult(RespStatusEnum responseStatus, Object data) {
         this.status = responseStatus.status();
         this.msg = responseStatus.msg();
         this.success = responseStatus.success();
         this.data = data;
     }
 
-    public GraceResult(ResponseStatusEnum responseStatus, String msg) {
+    public GraceResult(RespStatusEnum responseStatus, String msg) {
         this.status = responseStatus.status();
         this.msg = msg;
         this.success = responseStatus.success();
@@ -71,7 +71,7 @@ public class GraceResult {
      * @return
      */
     public static GraceResult ok() {
-        return new GraceResult(ResponseStatusEnum.SUCCESS);
+        return new GraceResult(RespStatusEnum.SUCCESS);
     }
 
     /**
@@ -80,7 +80,7 @@ public class GraceResult {
      * @return
      */
     public static GraceResult error() {
-        return new GraceResult(ResponseStatusEnum.FAILED);
+        return new GraceResult(RespStatusEnum.FAILED);
     }
 
     /**
@@ -89,7 +89,7 @@ public class GraceResult {
      * @param responseStatus
      * @return
      */
-    public static GraceResult error(ResponseStatusEnum responseStatus) {
+    public static GraceResult error(RespStatusEnum responseStatus) {
         return new GraceResult(responseStatus);
     }
 
@@ -100,7 +100,7 @@ public class GraceResult {
      * @return
      */
     public static GraceResult errorMap(Map map) {
-        return new GraceResult(ResponseStatusEnum.FAILED, map);
+        return new GraceResult(RespStatusEnum.FAILED, map);
     }
 
     /**
@@ -110,7 +110,7 @@ public class GraceResult {
      * @return
      */
     public static GraceResult errorMsg(String msg) {
-        return new GraceResult(ResponseStatusEnum.FAILED, msg);
+        return new GraceResult(RespStatusEnum.FAILED, msg);
     }
 
     /**
@@ -119,7 +119,7 @@ public class GraceResult {
      * @return
      */
     public static GraceResult errorTicket() {
-        return new GraceResult(ResponseStatusEnum.TICKET_INVALID);
+        return new GraceResult(RespStatusEnum.TICKET_INVALID);
     }
 
     /**
@@ -128,7 +128,7 @@ public class GraceResult {
      * @return
      */
     public boolean isOk() {
-        return Objects.equals(this.status, ResponseStatusEnum.SUCCESS.status());
+        return Objects.equals(this.status, RespStatusEnum.SUCCESS.status());
     }
 
     /**

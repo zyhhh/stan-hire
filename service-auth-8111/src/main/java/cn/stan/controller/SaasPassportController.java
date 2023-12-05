@@ -2,7 +2,7 @@ package cn.stan.controller;
 
 import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.result.GraceResult;
-import cn.stan.common.result.ResponseStatusEnum;
+import cn.stan.common.result.RespStatusEnum;
 import cn.stan.common.utils.GsonUtils;
 import cn.stan.common.utils.JWTUtils;
 import cn.stan.pojo.Users;
@@ -63,24 +63,24 @@ public class SaasPassportController extends BaseInfoProperties {
     public GraceResult scanCode(String qrToken, HttpServletRequest request) {
 
         if (StringUtils.isBlank(qrToken))
-            return GraceResult.error(ResponseStatusEnum.USER_PARAMS_ERROR);
+            return GraceResult.error(RespStatusEnum.USER_PARAMS_ERROR);
 
         // 校验二维码令牌
         String redisQRToken = redisUtils.get(SAAS_PLATFORM_LOGIN_TOKEN + ":" + qrToken);
         if (!qrToken.equalsIgnoreCase(redisQRToken))
-            return GraceResult.error(ResponseStatusEnum.USER_PARAMS_ERROR);
+            return GraceResult.error(RespStatusEnum.USER_PARAMS_ERROR);
 
         // 检查用户请求头信息
         String headUserToken = request.getHeader("appUserToken");
         String headUserId = request.getHeader("appUserId");
 
         if (StringUtils.isBlank(headUserId) || StringUtils.isBlank(headUserToken))
-            return GraceResult.error(ResponseStatusEnum.HR_TICKET_INVALID);
+            return GraceResult.error(RespStatusEnum.HR_TICKET_INVALID);
 
         // 校验jwt
         String userJson = jwtUtils.checkJWT(headUserToken.split(JWTUtils.AT)[1]);
         if (StringUtils.isBlank(userJson))
-            return GraceResult.error(ResponseStatusEnum.HR_TICKET_INVALID);
+            return GraceResult.error(RespStatusEnum.HR_TICKET_INVALID);
 
         // 生成并返回预登录令牌
         String preToken = UUID.randomUUID().toString();
@@ -133,7 +133,7 @@ public class SaasPassportController extends BaseInfoProperties {
         String preTokenRedisArr = redisUtils.get(SAAS_PLATFORM_LOGIN_TOKEN_READ + ":" + qrToken);
 
         if (StringUtils.isBlank(preTokenRedisArr)) {
-            return GraceResult.error(ResponseStatusEnum.FAILED);
+            return GraceResult.error(RespStatusEnum.FAILED);
         }
 
         String preTokenRedis = preTokenRedisArr.split(",")[1];
@@ -141,7 +141,7 @@ public class SaasPassportController extends BaseInfoProperties {
             // 根据用户id获得用户信息
             Users hrUser = usersService.getById(userId);
             if (hrUser == null) {
-                return GraceResult.error(ResponseStatusEnum.USER_NOT_EXIST_ERROR);
+                return GraceResult.error(RespStatusEnum.USER_NOT_EXIST_ERROR);
             }
 
             // 存入用户信息到redis中，因为H5在未登录的情况下，拿不到用户id，所以暂存用户信息到redis。
@@ -168,7 +168,7 @@ public class SaasPassportController extends BaseInfoProperties {
         String userJson = redisUtils.get(REDIS_SAAS_USER_INFO + ":temp:" + preToken);
 
         if (StringUtils.isBlank(userJson))
-            return GraceResult.error(ResponseStatusEnum.USER_NOT_EXIST_ERROR);
+            return GraceResult.error(RespStatusEnum.USER_NOT_EXIST_ERROR);
 
         // 确认执行登录后，生成saas用户的token，并且长期有效
         String saasUserToken = jwtUtils.createToken(userJson, TOKEN_SAAS_PREFIX);

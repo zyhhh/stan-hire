@@ -2,7 +2,7 @@ package cn.stan.filter;
 
 import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.result.GraceResult;
-import cn.stan.common.result.ResponseStatusEnum;
+import cn.stan.common.result.RespStatusEnum;
 import cn.stan.common.property.ExcludeUrlProperties;
 import cn.stan.common.utils.GsonUtils;
 import cn.stan.common.utils.JWTUtils;
@@ -71,13 +71,13 @@ public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Order
 
         // 无Token不放行。网关抛出异常无法被全局异常捕获，需要重新构建response
         if (StringUtils.isBlank(token)) {
-            return renderErrorMsg(exchange, ResponseStatusEnum.UN_LOGIN);
+            return renderErrorMsg(exchange, RespStatusEnum.UN_LOGIN);
         }
 
         // 验证token
         String[] split = token.split(JWTUtils.AT);
         if (split.length < 2) {
-            return renderErrorMsg(exchange, ResponseStatusEnum.JWT_ERROR);
+            return renderErrorMsg(exchange, RespStatusEnum.JWT_ERROR);
         }
 
         String prefix = split[0];
@@ -120,9 +120,9 @@ public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Order
             ServerWebExchange newExchange = setNewHeader(exchange, header, userJson);
             return chain.filter(newExchange);
         } catch (ExpiredJwtException e) {
-            return renderErrorMsg(exchange, ResponseStatusEnum.JWT_EXPIRE_ERROR);
+            return renderErrorMsg(exchange, RespStatusEnum.JWT_EXPIRE_ERROR);
         } catch (Exception e) {
-            return renderErrorMsg(exchange, ResponseStatusEnum.JWT_ERROR);
+            return renderErrorMsg(exchange, RespStatusEnum.JWT_ERROR);
         }
     }
 
@@ -133,7 +133,7 @@ public class JwtFilter extends BaseInfoProperties implements GlobalFilter, Order
      * @param statusEnum
      * @return
      */
-    public Mono<Void> renderErrorMsg(ServerWebExchange exchange, ResponseStatusEnum statusEnum) {
+    public Mono<Void> renderErrorMsg(ServerWebExchange exchange, RespStatusEnum statusEnum) {
 
         // 1.获取response
         ServerHttpResponse response = exchange.getResponse();

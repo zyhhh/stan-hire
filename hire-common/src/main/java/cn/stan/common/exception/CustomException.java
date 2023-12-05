@@ -1,21 +1,21 @@
 package cn.stan.common.exception;
 
-import cn.stan.common.result.ResponseStatusEnum;
+import cn.stan.common.result.RespStatusEnum;
 
 public class CustomException extends RuntimeException {
 
-    private ResponseStatusEnum responseStatusEnum;
+    private RespStatusEnum respStatusEnum;
 
-    public CustomException(ResponseStatusEnum responseStatusEnum) {
-        super("自定义异常，状态码：" + responseStatusEnum.status() + "，异常信息：" + responseStatusEnum.msg());
-        this.responseStatusEnum = responseStatusEnum;
+    public CustomException(RespStatusEnum respStatusEnum) {
+        super("自定义异常，状态码：" + respStatusEnum.status() + "，异常信息：" + respStatusEnum.msg());
+        this.respStatusEnum = respStatusEnum;
     }
 
-    public ResponseStatusEnum getResponseStatusEnum() {
-        return responseStatusEnum;
+    public RespStatusEnum getRespStatusEnum() {
+        return respStatusEnum;
     }
 
-    public void setResponseStatusEnum(ResponseStatusEnum responseStatusEnum) {
-        this.responseStatusEnum = responseStatusEnum;
+    public void setRespStatusEnum(RespStatusEnum respStatusEnum) {
+        this.respStatusEnum = respStatusEnum;
     }
 }

@@ -1,7 +1,7 @@
 package cn.stan.service.impl;
 
 import cn.stan.common.exception.GraceException;
-import cn.stan.common.result.ResponseStatusEnum;
+import cn.stan.common.result.RespStatusEnum;
 import cn.stan.mapper.UsersMapper;
 import cn.stan.pojo.Users;
 import cn.stan.pojo.bo.ModifyUserBO;
@@ -34,7 +34,7 @@ public class UsersServiceImpl implements UsersService {
     public void modifyUserInfo(ModifyUserBO modifyUserBO) {
         String userId = modifyUserBO.getUserId();
         if(StringUtils.isBlank(userId)){
-            GraceException.display(ResponseStatusEnum.USER_INFO_UPDATED_ERROR);
+            GraceException.display(RespStatusEnum.USER_INFO_UPDATED_ERROR);
         }
 
         Users users = new Users();

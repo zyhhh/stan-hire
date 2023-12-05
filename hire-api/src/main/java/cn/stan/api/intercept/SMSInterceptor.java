@@ -2,7 +2,7 @@ package cn.stan.api.intercept;
 
 import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.exception.GraceException;
-import cn.stan.common.result.ResponseStatusEnum;
+import cn.stan.common.result.RespStatusEnum;
 import cn.stan.common.utils.IPUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -24,7 +24,7 @@ public class SMSInterceptor extends BaseInfoProperties implements HandlerInterce
 
         if(exist){
             // 抛出异常
-            GraceException.display(ResponseStatusEnum.SMS_NEED_WAIT_ERROR);
+            GraceException.display(RespStatusEnum.SMS_NEED_WAIT_ERROR);
             return false;
         }
 

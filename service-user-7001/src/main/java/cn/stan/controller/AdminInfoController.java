@@ -3,8 +3,7 @@ package cn.stan.controller;
 import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.result.GraceResult;
 import cn.stan.common.result.PagedGridResult;
-import cn.stan.common.result.ResponseStatusEnum;
-import cn.stan.pojo.bo.AdminBO;
+import cn.stan.common.result.RespStatusEnum;
 import cn.stan.pojo.bo.AdminCreateBO;
 import cn.stan.pojo.bo.ResetPwdBO;
 import cn.stan.service.AdminService;
@@ -65,7 +64,7 @@ public class AdminInfoController extends BaseInfoProperties {
     @PostMapping("delete")
     public GraceResult delete(String username) {
         if (Objects.equals("admin", username)) {
-            return GraceResult.error(ResponseStatusEnum.ADMIN_DELETE_ERROR);
+            return GraceResult.error(RespStatusEnum.ADMIN_DELETE_ERROR);
         }
         adminService.deleteAdmin(username);
         return GraceResult.ok();

@@ -1,7 +1,7 @@
 package cn.stan.common.utils;
 
 import cn.stan.common.exception.GraceException;
-import cn.stan.common.result.ResponseStatusEnum;
+import cn.stan.common.result.RespStatusEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
@@ -35,10 +35,10 @@ public class JWTUtils {
 
     public String createToken(String body, Long expireTime) {
         if (expireTime == null)
-            GraceException.display(ResponseStatusEnum.SYSTEM_NO_EXPIRE_ERROR);
+            GraceException.display(RespStatusEnum.SYSTEM_NO_EXPIRE_ERROR);
 
         if (expireTime < 0)
-            GraceException.display(ResponseStatusEnum.SYSTEM_EXPIRE_TIME_ERROR);
+            GraceException.display(RespStatusEnum.SYSTEM_EXPIRE_TIME_ERROR);
 
         return generateToken(body, expireTime);
     }
@@ -49,10 +49,10 @@ public class JWTUtils {
 
     public String createToken(String body, String prefix, Long expireTime) {
         if (expireTime == null)
-            GraceException.display(ResponseStatusEnum.SYSTEM_NO_EXPIRE_ERROR);
+            GraceException.display(RespStatusEnum.SYSTEM_NO_EXPIRE_ERROR);
 
         if (expireTime < 0)
-            GraceException.display(ResponseStatusEnum.SYSTEM_EXPIRE_TIME_ERROR);
+            GraceException.display(RespStatusEnum.SYSTEM_EXPIRE_TIME_ERROR);
 
         return prefix + AT + generateToken(body, expireTime);
     }

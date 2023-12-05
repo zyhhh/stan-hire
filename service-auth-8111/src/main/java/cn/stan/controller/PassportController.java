@@ -3,7 +3,7 @@ package cn.stan.controller;
 import cn.stan.api.mq.RabbitMQConfig;
 import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.result.GraceResult;
-import cn.stan.common.result.ResponseStatusEnum;
+import cn.stan.common.result.RespStatusEnum;
 import cn.stan.common.utils.GsonUtils;
 import cn.stan.common.utils.IPUtils;
 import cn.stan.common.utils.JWTUtils;
@@ -128,7 +128,7 @@ public class PassportController extends BaseInfoProperties {
         // 1.校验验证码
         String code = redisUtils.get(MOBILE_SMSCODE + ":" + mobile);
         if (StringUtils.isBlank(code) || !smsCode.equalsIgnoreCase(code)) {
-            return GraceResult.error(ResponseStatusEnum.SMS_CODE_ERROR);
+            return GraceResult.error(RespStatusEnum.SMS_CODE_ERROR);
         }
 
         // 2.查询用户是否存在，存在则登录，不存在则注册

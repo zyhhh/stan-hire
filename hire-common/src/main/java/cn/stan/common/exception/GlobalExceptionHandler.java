@@ -1,7 +1,7 @@
 package cn.stan.common.exception;
 
 import cn.stan.common.result.GraceResult;
-import cn.stan.common.result.ResponseStatusEnum;
+import cn.stan.common.result.RespStatusEnum;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(CustomException.class)
     public GraceResult handleCustomException(CustomException ex) {
-        return GraceResult.error(ex.getResponseStatusEnum());
+        return GraceResult.error(ex.getRespStatusEnum());
     }
 
     /**
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     })
     public GraceResult handleJWTException(SignatureException ex) {
         log.error(ex.getMessage(), ex);
-        return GraceResult.error(ResponseStatusEnum.JWT_SIGNATURE_ERROR);
+        return GraceResult.error(RespStatusEnum.JWT_SIGNATURE_ERROR);
     }
 
     /**

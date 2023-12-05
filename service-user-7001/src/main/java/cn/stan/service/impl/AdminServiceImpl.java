@@ -3,16 +3,14 @@ package cn.stan.service.impl;
 import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.exception.GraceException;
 import cn.stan.common.result.PagedGridResult;
-import cn.stan.common.result.ResponseStatusEnum;
+import cn.stan.common.result.RespStatusEnum;
 import cn.stan.common.utils.MD5Utils;
 import cn.stan.mapper.AdminMapper;
 import cn.stan.pojo.Admin;
-import cn.stan.pojo.bo.AdminBO;
 import cn.stan.pojo.bo.AdminCreateBO;
 import cn.stan.service.AdminService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
-import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +42,7 @@ public class AdminServiceImpl extends BaseInfoProperties implements AdminService
         Admin adminDB = adminMapper.selectOne(new QueryWrapper<Admin>().eq("username", adminCreateBO.getUsername()));
         // 优雅的异常解耦处理
         if (Objects.nonNull(adminDB))
-            GraceException.display(ResponseStatusEnum.ADMIN_USERNAME_EXIST_ERROR);
+            GraceException.display(RespStatusEnum.ADMIN_USERNAME_EXIST_ERROR);
 
         Admin newAdmin = new Admin();
         BeanUtils.copyProperties(adminCreateBO, newAdmin);
@@ -76,6 +74,6 @@ public class AdminServiceImpl extends BaseInfoProperties implements AdminService
 
         int res = adminMapper.delete(new QueryWrapper<Admin>().eq("username", username));
 
-        if (res == 0) GraceException.display(ResponseStatusEnum.ADMIN_DELETE_ERROR);
+        if (res == 0) GraceException.display(RespStatusEnum.ADMIN_DELETE_ERROR);
     }
 }

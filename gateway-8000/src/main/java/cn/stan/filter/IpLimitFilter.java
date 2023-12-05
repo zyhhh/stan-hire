@@ -2,11 +2,10 @@ package cn.stan.filter;
 
 import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.result.GraceResult;
-import cn.stan.common.result.ResponseStatusEnum;
+import cn.stan.common.result.RespStatusEnum;
 import cn.stan.common.property.ExcludeUrlProperties;
 import cn.stan.common.utils.GsonUtils;
 import cn.stan.common.utils.IPUtils;
-import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -84,7 +83,7 @@ public class IpLimitFilter extends BaseInfoProperties implements GlobalFilter, O
         // 1.校验当前ip是否已被限制，已被限制直接返回
         long ttl = redisUtils.ttl(ipLimitKey);
         if (ttl > 0) {
-            return renderErrorMsg(exchange, ResponseStatusEnum.SYSTEM_ERROR_BLACK_IP);
+            return renderErrorMsg(exchange, RespStatusEnum.SYSTEM_ERROR_BLACK_IP);
         }
 
         // 2.设置当前ip请求接口的次数
@@ -97,7 +96,7 @@ public class IpLimitFilter extends BaseInfoProperties implements GlobalFilter, O
         // 单位时间内ip请求接口的次数达到限制，则进行限流并返回错误
         if (reqCount > maxCountLimit) {
             redisUtils.set(ipLimitKey, "1", timeLimits);
-            return renderErrorMsg(exchange, ResponseStatusEnum.SYSTEM_ERROR_BLACK_IP);
+            return renderErrorMsg(exchange, RespStatusEnum.SYSTEM_ERROR_BLACK_IP);
         }
 
         return chain.filter(exchange);
@@ -110,7 +109,7 @@ public class IpLimitFilter extends BaseInfoProperties implements GlobalFilter, O
      * @param statusEnum
      * @return
      */
-    public Mono<Void> renderErrorMsg(ServerWebExchange exchange, ResponseStatusEnum statusEnum) {
+    public Mono<Void> renderErrorMsg(ServerWebExchange exchange, RespStatusEnum statusEnum) {
 
         // 1.获取response
         ServerHttpResponse response = exchange.getResponse();

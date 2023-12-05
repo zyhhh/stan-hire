@@ -3,7 +3,7 @@ package cn.stan.controller;
 import cn.stan.api.intercept.UserInfoInterceptor;
 import cn.stan.common.base.BaseInfoProperties;
 import cn.stan.common.result.GraceResult;
-import cn.stan.common.result.ResponseStatusEnum;
+import cn.stan.common.result.RespStatusEnum;
 import cn.stan.common.utils.GsonUtils;
 import cn.stan.common.utils.JWTUtils;
 import cn.stan.pojo.Admin;
@@ -41,7 +41,7 @@ public class AdminLoginController extends BaseInfoProperties {
         Admin loginAdmin = adminService.getLoginAdmin(adminBO);
 
         if (Objects.isNull(loginAdmin)) {
-            return GraceResult.error(ResponseStatusEnum.ADMIN_LOGIN_ERROR);
+            return GraceResult.error(RespStatusEnum.ADMIN_LOGIN_ERROR);
         }
 
         String adminToken = jwtUtils.createToken(GsonUtils.objectToString(loginAdmin), TOKEN_ADMIN_PREFIX);

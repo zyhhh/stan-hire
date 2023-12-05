@@ -1,7 +1,7 @@
 package cn.stan.common.enums;
 
 import cn.stan.common.exception.GraceException;
-import cn.stan.common.result.ResponseStatusEnum;
+import cn.stan.common.result.RespStatusEnum;
 
 /**
  * @Desc: 修改用户信息类型 枚举
@@ -29,7 +29,7 @@ public enum UserInfoModifyType {
                 type != UserInfoModifyType.BIRTHDAY.type &&
                 type != UserInfoModifyType.LOCATION.type &&
                 type != UserInfoModifyType.DESC.type) {
-            GraceException.display(ResponseStatusEnum.USER_INFO_UPDATED_ERROR);
+            GraceException.display(RespStatusEnum.USER_INFO_UPDATED_ERROR);
         }
     }
 }

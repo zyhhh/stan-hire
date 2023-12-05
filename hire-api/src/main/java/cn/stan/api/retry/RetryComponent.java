@@ -1,7 +1,7 @@
 package cn.stan.api.retry;
 
 import cn.stan.common.exception.GraceException;
-import cn.stan.common.result.ResponseStatusEnum;
+import cn.stan.common.result.RespStatusEnum;
 import cn.stan.common.utils.SMSRetry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Backoff;
@@ -39,7 +39,7 @@ public class RetryComponent {
      */
     @Recover
     public boolean recover() {
-        GraceException.display(ResponseStatusEnum.FAILED);
+        GraceException.display(RespStatusEnum.FAILED);
         return false;
     }
 }
